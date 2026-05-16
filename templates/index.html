@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Quest Auto - Tự động nhận thưởng an toàn</title>
+    <meta name="description" content="Discord Quest Auto - Công cụ tự động hóa quá trình stream nhận thưởng Discord Quest. Không treo máy, không tải game, an toàn tuyệt đối.">
+    <meta name="keywords" content="Discord Quest, Auto Discord Quest, Tự động Discord, Nhận thưởng Discord">
+    <meta name="author" content="tanbaycu">
+    <meta property="og:title" content="Discord Quest Auto - Tự động nhận thưởng">
+    <meta property="og:description" content="Tự động hóa stream nhận thưởng Discord Quest nhanh chóng. Không cần tải game, an toàn 100% qua token.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/static/logo.png">
+    <link rel="icon" type="image/png" href="/static/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Roboto Mono', 'monospace'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            green: '#00C853',
+                            red: '#d50000',
+                            warn: '#ffab00',
+                            info: '#00b0ff',
+                            dark: '#09090B',
+                            light: '#FAFAFA'
+                        }
+                    },
+                    animation: {
+                        blob: "blob 15s infinite",
+                        marquee: 'marquee 25s linear infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            "0%": { transform: "translate(0px, 0px) scale(1)" },
+                            "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                            "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                            "100%": { transform: "translate(0px, 0px) scale(1)" }
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAFAFA;
+            color: #09090B;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .editorial-text {
+            font-size: clamp(1rem, 1.8vw, 1.4rem);
+            line-height: 1.6;
+            letter-spacing: -0.01em;
+            color: #4B5563;
+        }
+
+        .editorial-text strong {
+            font-weight: 800;
+            color: #09090B;
+        }
+
+        .instruction-code {
+            font-family: 'Roboto Mono', monospace;
+            background-color: rgba(9, 9, 11, 0.05);
+            color: #09090B;
+            padding: 0.2em 0.4em;
+            border-radius: 0.3em;
+            font-size: 0.85em;
+            font-weight: 600;
+            border: 1px solid rgba(9, 9, 11, 0.1);
+        }
+
+        .action-link {
+            display: inline-block;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            line-height: 1;
+        }
+
+        .action-start { color: #09090B; }
+        .action-start:hover { color: #00C853; transform: translateX(10px); }
+        .action-stop { color: #d50000; }
+        .action-stop:hover { color: #09090B; transform: translateX(10px); }
+
+        .token-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 4px solid #E5E7EB;
+            color: #09090B;
+            padding: 0.5rem 0;
+            outline: none;
+            transition: all 0.4s ease;
+        }
+        .token-input:focus { border-bottom-color: #09090B; }
+        .token-input::placeholder { color: #D1D5DB; }
+
+        .terminal-feed {
+            font-family: 'Roboto Mono', monospace;
+            font-size: clamp(0.75rem, 1vw, 0.95rem);
+            line-height: 1.8;
+            scroll-behavior: smooth;
+        }
+
+        .log-row {
+            display: grid;
+            grid-template-columns: 75px 1fr;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed rgba(0,0,0,0.05);
+            transition: background-color 0.2s;
+        }
+        @media (min-width: 768px) {
+            .log-row { grid-template-columns: 85px 1fr; gap: 1.5rem; }
+        }
+        .log-row:hover { background-color: rgba(0,0,0,0.02); border-radius: 4px; }
+
+        .fade-in { animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .fade-in-up { animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
+        .pulse-text { animation: pulseText 2s infinite; }
+        @keyframes pulseText {
+            0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(0,200,83,0.4); }
+            50% { opacity: 0.6; text-shadow: 0 0 0px rgba(0,200,83,0); }
+        }
+
+        ::-webkit-scrollbar { width: 5px; background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
+
+        .status-ring { position: relative; }
+        .status-ring::before {
+            content: ''; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px;
+            border-radius: 50%; border: 2px solid currentColor; opacity: 0.3;
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen overflow-x-hidden selection:bg-brand-dark selection:text-white relative font-sans">
+
+    <!-- Background Blobs (Global) - Optimized for Performance -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none opacity-60">
+        <div class="absolute top-[-10%] left-[-10%] w-[80vw] md:w-[50vw] h-[80vw] md:h-[50vw] rounded-full bg-brand-green/20 filter blur-[80px] md:blur-[100px] transform-gpu"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[70vw] md:w-[45vw] h-[70vw] md:h-[45vw] rounded-full bg-brand-info/20 filter blur-[80px] md:blur-[100px] transform-gpu"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-[90vw] md:w-[60vw] h-[90vw] md:h-[60vw] rounded-full bg-purple-300/20 filter blur-[80px] md:blur-[100px] transform-gpu"></div>
+    </div>
+
+    <!-- VIEW 1: INTRO (Contains Marquee and Footer) -->
+    <div id="view-intro" class="flex flex-col w-full min-h-screen">
+        
+        <!-- Ticker Top -->
+        <div class="w-full bg-brand-dark text-white py-3.5 md:py-4 overflow-hidden flex border-b-4 border-brand-green relative z-50 shadow-lg">
+            <div id="ticker-text" class="font-mono text-[0.65rem] md:text-sm tracking-[0.2em] uppercase flex items-center space-x-6 md:space-x-12 min-w-max transition-opacity duration-500 opacity-100 font-bold whitespace-nowrap px-4 md:px-8">
+                <!-- JS will populate -->
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="flex flex-col justify-center px-5 py-16 md:py-24 md:px-12 lg:px-24 max-w-[1600px] mx-auto w-full relative flex-1">
+            <div class="max-w-6xl fade-in-up stagger-1 z-10">
+                <p class="font-mono text-[0.65rem] md:text-sm tracking-[0.2em] text-brand-green font-bold mb-6 md:mb-8 flex items-center">
+                    <span class="w-6 md:w-12 h-px bg-brand-green mr-3 md:mr-4"></span> RELEASE BY tanbaycu
+                </p>
+                <h1 class="font-display text-[3.5rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] leading-[0.9] md:leading-[0.85] font-black uppercase tracking-tighter text-brand-dark mb-8 md:mb-10 break-words">
+                    Discord<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-green to-brand-info">Quest</span><br>
+                    Auto.
+                </h1>
+                
+                <p class="editorial-text max-w-3xl mb-10 md:mb-12 text-gray-700 pr-4">
+                    Tự động hóa hoàn toàn quá trình stream nhận thưởng Discord Quest. <strong class="text-brand-dark">Không treo máy. Không tải game. An toàn tuyệt đối.</strong> Request tới API được mã hóa trực tiếp qua Token của bạn.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
+                    <a id="nav-to-app" class="cursor-pointer group flex items-center justify-center sm:justify-start bg-brand-dark text-white px-8 md:px-10 py-4 md:py-5 rounded-full hover:bg-brand-green transition-all duration-500 shadow-xl shadow-brand-dark/20 hover:shadow-brand-green/30 hover:-translate-y-1">
+                        <span class="font-display text-lg md:text-xl font-bold tracking-widest uppercase">Mở Hệ Thống</span>
+                        <div class="w-8 h-8 md:w-10 md:h-10 ml-4 rounded-full bg-white/20 flex items-center justify-center transform transition-transform duration-500 group-hover:translate-x-2">
+                            <svg class="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </div>
+                    </a>
+                    
+                    <a href="#guide-section" class="font-mono text-[0.7rem] md:text-sm uppercase tracking-widest font-bold text-gray-500 hover:text-brand-dark transition-colors flex items-center justify-center sm:justify-start gap-2 px-4 py-3">
+                        Xem Hướng Dẫn <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instruction Section -->
+        <section id="guide-section" class="py-16 md:py-24 px-5 md:px-12 lg:px-24 w-full relative z-10">
+            <div class="max-w-[1600px] mx-auto">
+                
+                <div class="mb-10 md:mb-16 md:text-center fade-in-up stagger-2">
+                    <h2 class="font-display text-3xl md:text-5xl font-black uppercase tracking-tight text-brand-dark mb-3 md:mb-4">Hướng dẫn lấy Token</h2>
+                    <p class="font-mono text-[0.65rem] md:text-sm tracking-widest text-gray-500 uppercase">Dữ liệu định danh thiết yếu để hệ thống hoạt động</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 fade-in-up stagger-3">
+                    
+                    <!-- PC Card -->
+                    <div class="glass-panel p-6 sm:p-8 md:p-12 rounded-3xl md:rounded-[3rem] relative overflow-hidden group hover:bg-white/90 transition-all duration-500 border border-white/80 shadow-sm">
+                        <div class="absolute top-0 right-0 w-32 md:w-48 h-32 md:h-48 bg-brand-info/10 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700"></div>
+                        <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-brand-dark text-white flex items-center justify-center mb-6 md:mb-8 shadow-xl shadow-brand-dark/20">
+                            <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        
+                        <div class="flex flex-col lg:flex-row lg:items-center gap-3 mb-6 md:mb-8">
+                            <h3 class="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight text-brand-dark m-0">Trên Máy Tính (PC)</h3>
+                            <span class="w-max bg-brand-green/10 text-brand-green font-bold text-[0.65rem] md:text-xs uppercase tracking-widest px-3 py-1.5 rounded-full">★ Khuyên Dùng</span>
+                        </div>
+
+                        <ol class="list-decimal pl-4 md:pl-5 text-sm md:text-base text-gray-700 space-y-3 md:space-y-4 font-mono leading-relaxed">
+                            <li>Mở <strong class="text-brand-dark">Discord Web</strong> trên trình duyệt.</li>
+                            <li>Nhấn <code class="instruction-code">F12</code> hoặc <code class="instruction-code">Ctrl+Shift+I</code> để mở công cụ DevTools.</li>
+                            <li>Chuyển sang tab <strong class="text-brand-dark">Network (Mạng)</strong>.</li>
+                            <li>Gõ <code class="instruction-code">/api/</code> vào ô Filter (Lọc).</li>
+                            <li>Click vào một request bất kỳ hiện ra (VD: <em>science</em>).</li>
+                            <li>Kéo xuống <strong class="text-brand-dark">Request Headers</strong>, tìm và copy đoạn mã tại dòng <strong class="text-brand-dark bg-yellow-100 px-1">Authorization</strong>.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Mobile Card -->
+                    <div class="glass-panel p-6 sm:p-8 md:p-12 rounded-3xl md:rounded-[3rem] relative overflow-hidden group hover:bg-white/90 transition-all duration-500 border border-white/80 shadow-sm">
+                        <div class="absolute top-0 right-0 w-32 md:w-48 h-32 md:h-48 bg-brand-warn/10 rounded-bl-full -z-10 group-hover:scale-150 transition-transform duration-700"></div>
+                        <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white border border-gray-200 text-brand-dark flex items-center justify-center mb-6 md:mb-8 shadow-sm">
+                            <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        </div>
+                        
+                        <div class="flex flex-col lg:flex-row lg:items-center gap-3 mb-6 md:mb-8">
+                            <h3 class="font-display text-2xl md:text-3xl font-bold uppercase tracking-tight text-brand-dark m-0">Trên Điện Thoại</h3>
+                        </div>
+
+                        <ol class="list-decimal pl-4 md:pl-5 text-sm md:text-base text-gray-700 space-y-3 md:space-y-4 font-mono leading-relaxed">
+                            <li>Tải trình duyệt <strong class="text-brand-dark">Kiwi Browser</strong> (Android) hoặc <strong class="text-brand-dark">Safari</strong> (iOS).</li>
+                            <li>Truy cập <strong class="text-brand-dark">Discord Web</strong>, đăng nhập và bật chế độ <em>"Trang web cho Máy tính"</em>.</li>
+                            <li>Mở <strong class="text-brand-dark">Developer Tools</strong> trong menu cài đặt của trình duyệt.</li>
+                            <li>Thực hiện các bước tìm Token trong tab <strong class="text-brand-dark">Network</strong> giống trên PC.</li>
+                        </ol>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="w-full relative z-50 mt-12 mb-12 md:mt-24 md:mb-16 px-4 sm:px-8 md:px-12 lg:px-24">
+            <div class="max-w-[1600px] mx-auto relative">
+                
+                <!-- Massive Background Text -->
+                <div class="absolute inset-0 overflow-hidden flex items-center justify-center -z-10 pointer-events-none opacity-[0.03]">
+                    <span class="font-display font-black text-[15vw] leading-none whitespace-nowrap">OPEN SOURCE</span>
+                </div>
+
+                <!-- Footer Container (Glass Panel) -->
+                <div class="glass-panel rounded-[2rem] md:rounded-[4rem] p-6 sm:p-10 md:p-16 border border-white/60 relative overflow-hidden group shadow-2xl shadow-brand-dark/5">
+                    <!-- Decorative Gradient -->
+                    <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-brand-green/20 rounded-full blur-[60px] group-hover:bg-brand-info/30 transition-colors duration-1000 -z-10"></div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-end">
+                        
+                        <!-- Left: Big Branding -->
+                        <div class="lg:col-span-5 flex flex-col justify-between h-full">
+                            <div class="mb-6 lg:mb-0">
+                                <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-brand-dark mb-3 lg:mb-4 leading-[0.9]">
+                                    Discord<br>Quest Auto.
+                                </h2>
+                                <p class="font-mono text-[0.65rem] md:text-sm text-gray-500 tracking-widest uppercase lg:mb-8">
+                                    /// Web UI Edition
+                                </p>
+                            </div>
+                            
+                            <div class="hidden lg:block font-mono text-[0.65rem] text-gray-400 font-bold tracking-[0.2em] uppercase">
+                                © 2026 / NO COMMERCIAL USE
+                            </div>
+                        </div>
+
+                        <!-- Right: Credits Grid -->
+                        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
+                            
+                            <!-- Remaster Card -->
+                            <div class="bg-white/50 rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 border border-white/60 hover:bg-white/80 transition-all duration-300 flex flex-col justify-center">
+                                <p class="font-mono text-[0.6rem] md:text-[0.65rem] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 md:mb-3">Web UI Remastered By</p>
+                                <h4 class="font-display text-2xl md:text-3xl font-bold tracking-tight text-brand-dark mb-3">tanbaycu</h4>
+                                <p class="font-mono text-[0.7rem] md:text-xs text-gray-600 leading-relaxed">
+                                    Bản gốc là công cụ CLI. Tôi thiết kế thêm giao diện Web để ae thao tác dễ dàng trên trình duyệt.
+                                </p>
+                            </div>
+
+                            <!-- Original Author Card -->
+                            <div class="bg-brand-dark rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-8 text-white relative overflow-hidden group/author shadow-xl shadow-brand-dark/10 flex flex-col justify-center">
+                                <!-- Hover effect background -->
+                                <div class="absolute inset-0 bg-gradient-to-br from-brand-green/20 to-brand-info/20 opacity-0 group-hover/author:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                                
+                                <div class="relative z-10">
+                                    <p class="font-mono text-[0.6rem] md:text-[0.65rem] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 md:mb-3">Original CLI Author</p>
+                                    <h4 class="font-display text-2xl md:text-3xl font-bold tracking-tight text-white mb-5">thanhdo1110</h4>
+                                    
+                                    <a href="https://github.com/thanhdo1110/Discord-Quest-Auto-Completer" target="_blank" class="flex items-center justify-center sm:justify-start gap-3 bg-white/10 hover:bg-white/20 px-3 py-3 md:px-4 md:py-3.5 rounded-xl transition-all duration-300 w-full group/btn hover:-translate-y-1">
+                                        <svg class="w-6 h-6 md:w-7 md:h-7 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 100.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path></svg>
+                                        <div class="flex flex-col text-left">
+                                            <span class="font-mono text-[0.7rem] md:text-xs font-bold uppercase tracking-wider whitespace-nowrap">GitHub Repo</span>
+                                            <span class="font-mono text-[0.55rem] md:text-[0.6rem] text-brand-info font-bold uppercase mt-0.5 animate-pulse group-hover/btn:text-white transition-colors whitespace-nowrap">★ Cho 1 sao nhé!</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <!-- Mobile copyright -->
+                        <div class="block lg:hidden mt-6 font-mono text-[0.65rem] text-gray-400 font-bold tracking-[0.2em] uppercase text-center w-full">
+                            © 2026 / NO COMMERCIAL USE
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- VIEW 2: APP / LOGS -->
+    <div id="view-app" class="hidden min-h-screen flex-col px-5 py-12 md:py-16 md:px-12 lg:px-24 max-w-[1600px] mx-auto w-full">
+        
+        <!-- Adjusted grid to give console more space (lg:col-span-8 instead of 7) -->
+        <div class="w-full flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-10 md:gap-12 lg:gap-12">
+            
+            <!-- Left Column: Controls (lg:col-span-4) -->
+            <div class="lg:col-span-4 flex flex-col pt-2 md:pt-4 relative z-20">
+                
+                <!-- Back Button -->
+                <button id="nav-back" class="mb-10 font-mono text-[0.65rem] md:text-xs font-bold text-gray-400 hover:text-brand-dark uppercase tracking-widest flex items-center transition-colors w-max">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Quay Về Trang Chủ
+                </button>
+
+                <!-- Token Input Section -->
+                <div class="mb-12 md:mb-16 fade-in-up stagger-1">
+                    <div class="flex justify-between items-end mb-3 md:mb-4">
+                        <label for="token-input" class="block font-mono font-bold text-[0.65rem] md:text-xs tracking-[0.2em] text-gray-500 uppercase">Token Định Danh</label>
+                        <span class="text-[0.65rem] md:text-xs font-mono text-gray-400 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                            Encrypted
+                        </span>
+                    </div>
+                    <input type="password" id="token-input" placeholder="Paste Token..." class="token-input font-mono text-2xl md:text-4xl font-bold tracking-tight bg-transparent">
+                </div>
+
+                <!-- Action Board -->
+                <div class="mb-12 md:mb-16 fade-in-up stagger-2">
+                    <div class="font-mono text-[0.65rem] md:text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-4 md:mb-6">Điều Khiển Tiến Trình</div>
+                    <div id="action-wrapper" class="relative">
+                        <a id="action-start" class="action-link action-start group flex items-center gap-3 md:gap-4">
+                            BẮT ĐẦU 
+                            <svg class="w-8 h-8 md:w-12 md:h-12 transform transition-transform group-hover:translate-x-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a id="action-stop" class="action-link action-stop group hidden items-center gap-3 md:gap-4">
+                            DỪNG LẠI 
+                            <svg class="w-8 h-8 md:w-12 md:h-12 transform transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Status Indicator -->
+                <div class="fade-in-up stagger-3 mt-auto pb-8 lg:pb-0">
+                    <div class="font-mono text-[0.65rem] md:text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-3 md:mb-4">Trạng Thái Hệ Thống</div>
+                    <div id="status-indicator" class="font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter text-gray-300 transition-all duration-500">
+                        ĐANG CHỜ LỆNH
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Terminal (Expanded to lg:col-span-8) -->
+            <div class="lg:col-span-8 flex flex-col fade-in-up stagger-4 min-h-[55vh] md:min-h-[60vh] lg:min-h-[80vh] relative z-10">
+                <div class="glass-panel flex-1 rounded-3xl md:rounded-[2rem] flex flex-col overflow-hidden border border-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] relative">
+                    
+                    <!-- Terminal Header -->
+                    <div class="bg-white/60 border-b border-white/50 px-5 md:px-6 py-3 md:py-4 flex items-center justify-between backdrop-blur-md">
+                        <div class="flex space-x-2 md:space-x-2.5">
+                            <div class="w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-[#FF5F56] border border-[#E0443E]"></div>
+                            <div class="w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-[#FFBD2E] border border-[#DEA123]"></div>
+                            <div class="w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
+                        </div>
+                        <div class="flex items-center space-x-2 md:space-x-3">
+                            <h3 class="font-mono font-bold text-[0.65rem] md:text-xs uppercase tracking-[0.2em] text-gray-500">Console Log</h3>
+                            <div id="live-dot" class="w-2 h-2 md:w-2.5 md:h-2.5 bg-gray-300 rounded-full status-ring transition-colors"></div>
+                        </div>
+                    </div>
+
+                    <!-- Terminal Body -->
+                    <div class="flex-1 relative bg-white/30 backdrop-blur-sm">
+                        <div id="log-container" class="h-full overflow-y-auto terminal-feed absolute inset-0 p-5 md:p-8">
+                            <div class="opacity-60 italic mt-2 text-gray-500 font-mono flex items-center" id="empty-log-msg">
+                                <span class="animate-pulse mr-2 font-black text-brand-dark">_</span> Hệ thống đang sẵn sàng.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Init Lenis
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+            
+            // Anchor links with Lenis
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    lenis.scrollTo(this.getAttribute('href'));
+                });
+            });
+
+            // Ticker Logic
+            const tickerLayouts = [
+                `<span class="text-brand-green">⚡ DISCORD QUEST AUTO</span><span class="text-white/30">//</span><span class="text-white">☁️ CLOUD BASED STREAMING</span><span class="text-white/30">//</span><span class="text-white">🎮 ZERO GAME INSTALL</span><span class="text-white/30">//</span><span class="text-white">🛡️ 100% ACCOUNT SAFE</span><span class="text-white/30">//</span><span class="text-brand-green">⚡ DISCORD QUEST AUTO</span><span class="text-white/30">//</span><span class="text-white">🚫 NO BAN RISK</span>`,
+                
+                `<span class="text-brand-info">🚀 REMASTERED WEB UI</span><span class="text-white/30">//</span><span class="text-white">💻 FULLY RESPONSIVE</span><span class="text-white/30">//</span><span class="text-white">🔒 SECURE API CALLS</span><span class="text-white/30">//</span><span class="text-white">⚡ INSTANT EXECUTION</span><span class="text-white/30">//</span><span class="text-brand-info">🚀 REMASTERED WEB UI</span><span class="text-white/30">//</span><span class="text-white">🔥 NO INSTALL REQUIRED</span>`
+            ];
+            
+            let tickerIdx = 0;
+            const tickerEl = document.getElementById('ticker-text');
+            if (tickerEl) {
+                tickerEl.innerHTML = tickerLayouts[0];
+                setInterval(() => {
+                    tickerEl.style.opacity = '0';
+                    setTimeout(() => {
+                        tickerIdx = (tickerIdx + 1) % tickerLayouts.length;
+                        tickerEl.innerHTML = tickerLayouts[tickerIdx];
+                        tickerEl.style.opacity = '1';
+                    }, 500);
+                }, 4000);
+            }
+
+            const viewIntro = document.getElementById('view-intro');
+            const viewApp = document.getElementById('view-app');
+            const navToApp = document.getElementById('nav-to-app');
+            const navBack = document.getElementById('nav-back');
+
+            // Elements
+            const tokenInput = document.getElementById('token-input');
+            const actionStart = document.getElementById('action-start');
+            const actionStop = document.getElementById('action-stop');
+            const statusIndicator = document.getElementById('status-indicator');
+            const logContainer = document.getElementById('log-container');
+            const liveDot = document.getElementById('live-dot');
+            const emptyLogMsg = document.getElementById('empty-log-msg');
+
+            let currentToken = '';
+            let logNextIdx = 0;
+            let pollInterval = null;
+
+            // INIT: Auto fill token from localStorage
+            const savedToken = localStorage.getItem('discord_quest_token');
+            if (savedToken) {
+                tokenInput.value = savedToken;
+                currentToken = savedToken;
+            }
+
+            // Navigate to App View
+            navToApp.addEventListener('click', () => {
+                viewIntro.classList.add('hidden');
+                viewApp.classList.remove('hidden');
+                viewApp.classList.add('flex');
+                lenis.scrollTo(0, { immediate: true });
+                
+                // If token exists, auto check status
+                if (currentToken) {
+                    checkStatus();
+                } else {
+                    tokenInput.focus();
+                }
+            });
+
+            // Navigate Back
+            if (navBack) {
+                navBack.addEventListener('click', () => {
+                    viewApp.classList.add('hidden');
+                    viewApp.classList.remove('flex');
+                    viewIntro.classList.remove('hidden');
+                    lenis.scrollTo(0, { immediate: true });
+                });
+            }
+
+            // Token input change
+            tokenInput.addEventListener('change', () => {
+                currentToken = tokenInput.value.trim();
+                if (currentToken) {
+                    localStorage.setItem('discord_quest_token', currentToken);
+                    resetLogs();
+                    checkStatus();
+                }
+            });
+
+            function resetLogs() {
+                logNextIdx = 0;
+                logContainer.innerHTML = '';
+            }
+
+            // Start Action
+            actionStart.addEventListener('click', async () => {
+                currentToken = tokenInput.value.trim();
+                if (!currentToken) {
+                    // Visual feedback for missing token
+                    tokenInput.style.borderBottomColor = '#d50000';
+                    setTimeout(() => tokenInput.style.borderBottomColor = '', 1000);
+                    tokenInput.focus();
+                    return;
+                }
+                localStorage.setItem('discord_quest_token', currentToken);
+
+                try {
+                    // Optimistic UI update
+                    updateUIState(true, true);
+                    
+                    const res = await fetch('/api/start', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: currentToken })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.status === 'running') {
+                        updateUIState(true);
+                        startPolling();
+                    } else {
+                        updateUIState(false);
+                    }
+                } catch (error) {
+                    console.error(error);
+                    updateUIState(false);
+                }
+            });
+
+            // Stop Action
+            actionStop.addEventListener('click', async () => {
+                if (!currentToken) return;
+                
+                try {
+                    // Optimistic UI update
+                    updateUIState(false, true);
+                    
+                    const res = await fetch('/api/stop', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: currentToken })
+                    });
+                    const data = await res.json();
+                    if (data.status === 'stopped') {
+                        // Polling will handle the rest or we force it
+                        updateUIState(false);
+                    }
+                } catch (error) {
+                    console.error(error);
+                    updateUIState(true);
+                }
+            });
+
+            async function checkStatus() {
+                if (!currentToken) return;
+                try {
+                    const res = await fetch(`/api/status?token=${encodeURIComponent(currentToken)}`);
+                    const data = await res.json();
+                    const isRunning = data.status === 'running';
+                    updateUIState(isRunning);
+                    if (isRunning) {
+                        startPolling();
+                    } else {
+                        stopPolling();
+                        fetchLogs();
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            function updateUIState(isRunning, isTransitioning = false) {
+                if (isRunning) {
+                    actionStart.classList.add('hidden');
+                    actionStart.classList.remove('flex');
+                    actionStop.classList.remove('hidden');
+                    actionStop.classList.add('flex');
+                    
+                    tokenInput.disabled = true;
+                    tokenInput.classList.add('opacity-50');
+                    
+                    statusIndicator.textContent = 'ĐANG HOẠT ĐỘNG';
+                    statusIndicator.classList.remove('text-gray-300', 'text-brand-red');
+                    statusIndicator.classList.add('text-brand-green', 'pulse-text');
+                    
+                    liveDot.classList.remove('bg-gray-300', 'text-gray-300');
+                    liveDot.classList.add('bg-brand-green', 'text-brand-green');
+                    
+                    if (emptyLogMsg) emptyLogMsg.style.display = 'none';
+                } else {
+                    actionStop.classList.add('hidden');
+                    actionStop.classList.remove('flex');
+                    actionStart.classList.remove('hidden');
+                    actionStart.classList.add('flex');
+                    
+                    tokenInput.disabled = false;
+                    tokenInput.classList.remove('opacity-50');
+                    
+                    statusIndicator.textContent = isTransitioning ? 'ĐANG DỪNG...' : 'TẠM DỪNG';
+                    statusIndicator.classList.remove('text-brand-green', 'pulse-text', 'text-gray-300');
+                    statusIndicator.classList.add('text-brand-red');
+                    
+                    liveDot.classList.remove('bg-brand-green', 'text-brand-green');
+                    liveDot.classList.add('bg-gray-300', 'text-gray-300');
+                }
+            }
+
+            function startPolling() {
+                if (pollInterval) clearInterval(pollInterval);
+                pollInterval = setInterval(async () => {
+                    await fetchLogs();
+                    await checkStatus();
+                }, 2000);
+            }
+
+            function stopPolling() {
+                if (pollInterval) {
+                    clearInterval(pollInterval);
+                    pollInterval = null;
+                }
+            }
+
+            function getLogStyle(level) {
+                switch(level) {
+                    case 'info': return 'color: #09090B; font-weight: 600;';
+                    case 'ok': return 'color: #00C853; font-weight: 700;';
+                    case 'warn': return 'color: #ffab00; font-weight: 700;';
+                    case 'error': return 'color: #d50000; font-weight: 700;';
+                    case 'progress': return 'color: #00b0ff; font-weight: 600;';
+                    case 'debug': return 'color: #9CA3AF;';
+                    default: return 'color: #4B5563;';
+                }
+            }
+
+            function appendLog(log) {
+                if (emptyLogMsg && emptyLogMsg.parentNode) {
+                    emptyLogMsg.parentNode.removeChild(emptyLogMsg);
+                }
+
+                const row = document.createElement('div');
+                row.className = 'log-row fade-in';
+                row.style.animationDuration = '0.3s';
+                
+                const tsCol = document.createElement('div');
+                tsCol.className = 'font-mono text-gray-400 text-[0.65rem] md:text-xs font-bold whitespace-nowrap pt-1';
+                tsCol.textContent = log.ts;
+                
+                const msgCol = document.createElement('div');
+                msgCol.className = 'break-words';
+                msgCol.style = getLogStyle(log.level);
+                msgCol.textContent = log.msg;
+                
+                row.appendChild(tsCol);
+                row.appendChild(msgCol);
+                
+                logContainer.appendChild(row);
+            }
+
+            async function fetchLogs() {
+                if (!currentToken) return;
+                try {
+                    const res = await fetch(`/api/logs?token=${encodeURIComponent(currentToken)}&start=${logNextIdx}`);
+                    const data = await res.json();
+                    
+                    if (data.logs && data.logs.length > 0) {
+                        data.logs.forEach(appendLog);
+                        logNextIdx = data.next_idx;
+                        logContainer.scrollTop = logContainer.scrollHeight;
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
