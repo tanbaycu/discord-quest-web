@@ -515,10 +515,7 @@
                 viewApp.classList.add('flex');
                 lenis.scrollTo(0, { immediate: true });
                 
-                // If token exists, auto check status
-                if (currentToken) {
-                    checkStatus();
-                } else {
+                if (!currentToken) {
                     tokenInput.focus();
                 }
             });
@@ -526,6 +523,11 @@
             // Navigate Back
             if (navBack) {
                 navBack.addEventListener('click', () => {
+                    if (isRunning) {
+                        const confirmLeave = confirm("Tiến trình đang chạy! Nếu bạn quay lại, hệ thống sẽ dừng. Bạn có chắc chắn muốn thoát?");
+                        if (!confirmLeave) return;
+                        actionStop.click();
+                    }
                     viewApp.classList.add('hidden');
                     viewApp.classList.remove('flex');
                     viewIntro.classList.remove('hidden');
@@ -533,13 +535,20 @@
                 });
             }
 
+            // Prevent accidental tab close
+            window.addEventListener('beforeunload', (e) => {
+                if (isRunning) {
+                    e.preventDefault();
+                    e.returnValue = 'Hệ thống đang chạy, bạn có chắc chắn muốn thoát?';
+                }
+            });
+
             // Token input change
             tokenInput.addEventListener('change', () => {
                 currentToken = tokenInput.value.trim();
                 if (currentToken) {
                     localStorage.setItem('discord_quest_token', currentToken);
                     resetLogs();
-                    checkStatus();
                 }
             });
 
