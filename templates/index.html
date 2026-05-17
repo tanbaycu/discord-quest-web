@@ -544,86 +544,79 @@
             });
 
             function resetLogs() {
-                logNextIdx = 0;
                 logContainer.innerHTML = '';
             }
+            
+            function getCurrentTime() {
+                const now = new Date();
+                return now.getHours().toString().padStart(2, '0') + ':' + 
+                       now.getMinutes().toString().padStart(2, '0') + ':' + 
+                       now.getSeconds().toString().padStart(2, '0');
+            }
 
-            // Start Action
+            function getLogStyle(level) {
+                switch(level) {
+                    case 'info': return 'color: #09090B; font-weight: 600;';
+                    case 'ok': return 'color: #00C853; font-weight: 700;';
+                    case 'warn': return 'color: #ffab00; font-weight: 700;';
+                    case 'error': return 'color: #d50000; font-weight: 700;';
+                    case 'progress': return 'color: #00b0ff; font-weight: 600;';
+                    case 'debug': return 'color: #9CA3AF;';
+                    default: return 'color: #4B5563;';
+                }
+            }
+
+            function appendLog(msg, level="info") {
+                if (emptyLogMsg && emptyLogMsg.parentNode) {
+                    emptyLogMsg.parentNode.removeChild(emptyLogMsg);
+                }
+
+                const row = document.createElement('div');
+                row.className = 'log-row fade-in';
+                row.style.animationDuration = '0.3s';
+                
+                const tsCol = document.createElement('div');
+                tsCol.className = 'font-mono text-gray-400 text-[0.65rem] md:text-xs font-bold whitespace-nowrap pt-1';
+                tsCol.textContent = getCurrentTime();
+                
+                const msgCol = document.createElement('div');
+                msgCol.className = 'break-words';
+                msgCol.style = getLogStyle(level);
+                msgCol.textContent = msg;
+                
+                row.appendChild(tsCol);
+                row.appendChild(msgCol);
+                
+                logContainer.appendChild(row);
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+
+            let loopInterval = null;
+            let isRunning = false;
+            let activeQuest = null;
+
             actionStart.addEventListener('click', async () => {
                 currentToken = tokenInput.value.trim();
                 if (!currentToken) {
-                    // Visual feedback for missing token
                     tokenInput.style.borderBottomColor = '#d50000';
                     setTimeout(() => tokenInput.style.borderBottomColor = '', 1000);
                     tokenInput.focus();
                     return;
                 }
                 localStorage.setItem('discord_quest_token', currentToken);
-
-                try {
-                    // Optimistic UI update
-                    updateUIState(true, true);
-                    
-                    const res = await fetch('/api/start', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ token: currentToken })
-                    });
-                    const data = await res.json();
-                    
-                    if (data.status === 'running') {
-                        updateUIState(true);
-                        startPolling();
-                    } else {
-                        updateUIState(false);
-                    }
-                } catch (error) {
-                    console.error(error);
-                    updateUIState(false);
-                }
+                resetLogs();
+                isRunning = true;
+                updateUIState(true);
+                await initQuestFlow();
             });
 
-            // Stop Action
-            actionStop.addEventListener('click', async () => {
-                if (!currentToken) return;
-                
-                try {
-                    // Optimistic UI update
-                    updateUIState(false, true);
-                    
-                    const res = await fetch('/api/stop', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ token: currentToken })
-                    });
-                    const data = await res.json();
-                    if (data.status === 'stopped') {
-                        // Polling will handle the rest or we force it
-                        updateUIState(false);
-                    }
-                } catch (error) {
-                    console.error(error);
-                    updateUIState(true);
-                }
+            actionStop.addEventListener('click', () => {
+                isRunning = false;
+                if (loopInterval) clearInterval(loopInterval);
+                appendLog("Đã yêu cầu dừng tiến trình.", "warn");
+                updateUIState(false, true);
+                setTimeout(() => updateUIState(false), 1000);
             });
-
-            async function checkStatus() {
-                if (!currentToken) return;
-                try {
-                    const res = await fetch(`/api/status?token=${encodeURIComponent(currentToken)}`);
-                    const data = await res.json();
-                    const isRunning = data.status === 'running';
-                    updateUIState(isRunning);
-                    if (isRunning) {
-                        startPolling();
-                    } else {
-                        stopPolling();
-                        fetchLogs();
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
-            }
 
             function updateUIState(isRunning, isTransitioning = false) {
                 if (isRunning) {
@@ -661,72 +654,106 @@
                 }
             }
 
-            function startPolling() {
-                if (pollInterval) clearInterval(pollInterval);
-                pollInterval = setInterval(async () => {
-                    await fetchLogs();
-                    await checkStatus();
-                }, 2000);
-            }
-
-            function stopPolling() {
-                if (pollInterval) {
-                    clearInterval(pollInterval);
-                    pollInterval = null;
-                }
-            }
-
-            function getLogStyle(level) {
-                switch(level) {
-                    case 'info': return 'color: #09090B; font-weight: 600;';
-                    case 'ok': return 'color: #00C853; font-weight: 700;';
-                    case 'warn': return 'color: #ffab00; font-weight: 700;';
-                    case 'error': return 'color: #d50000; font-weight: 700;';
-                    case 'progress': return 'color: #00b0ff; font-weight: 600;';
-                    case 'debug': return 'color: #9CA3AF;';
-                    default: return 'color: #4B5563;';
-                }
-            }
-
-            function appendLog(log) {
-                if (emptyLogMsg && emptyLogMsg.parentNode) {
-                    emptyLogMsg.parentNode.removeChild(emptyLogMsg);
-                }
-
-                const row = document.createElement('div');
-                row.className = 'log-row fade-in';
-                row.style.animationDuration = '0.3s';
-                
-                const tsCol = document.createElement('div');
-                tsCol.className = 'font-mono text-gray-400 text-[0.65rem] md:text-xs font-bold whitespace-nowrap pt-1';
-                tsCol.textContent = log.ts;
-                
-                const msgCol = document.createElement('div');
-                msgCol.className = 'break-words';
-                msgCol.style = getLogStyle(log.level);
-                msgCol.textContent = log.msg;
-                
-                row.appendChild(tsCol);
-                row.appendChild(msgCol);
-                
-                logContainer.appendChild(row);
-            }
-
-            async function fetchLogs() {
-                if (!currentToken) return;
+            async function initQuestFlow() {
+                if (!isRunning) return;
+                appendLog("Đang kiểm tra nhiệm vụ (Quest) khả dụng...", "info");
                 try {
-                    const res = await fetch(`/api/logs?token=${encodeURIComponent(currentToken)}&start=${logNextIdx}`);
-                    const data = await res.json();
+                    const res = await fetch('/api/quest/init', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: currentToken })
+                    });
                     
-                    if (data.logs && data.logs.length > 0) {
-                        data.logs.forEach(appendLog);
-                        logNextIdx = data.next_idx;
-                        logContainer.scrollTop = logContainer.scrollHeight;
+                    if (res.status === 401) {
+                        appendLog("Token không hợp lệ, vui lòng kiểm tra lại.", "error");
+                        actionStop.click();
+                        return;
+                    }
+
+                    const data = await res.json();
+                    if (data.status === 'no_quests') {
+                        appendLog(data.message, "warn");
+                        actionStop.click();
+                        return;
+                    }
+
+                    if (data.status === 'active') {
+                        activeQuest = data.quest;
+                        appendLog(`Bắt đầu: ${activeQuest.name} (${activeQuest.task_type})`, "ok");
+                        startQuestLoop();
                     }
                 } catch (error) {
-                    console.error(error);
+                    appendLog("Lỗi kết nối máy chủ: " + error.message, "error");
+                    actionStop.click();
                 }
             }
+
+            function startQuestLoop() {
+                if (!isRunning || !activeQuest) return;
+                
+                const isVideo = activeQuest.task_type.includes("VIDEO");
+                const intervalMs = isVideo ? 6000 : 20000;
+                
+                let done = activeQuest.done || 0;
+                const needed = activeQuest.needed || 1;
+
+                if (loopInterval) clearInterval(loopInterval);
+                
+                loopInterval = setInterval(async () => {
+                    if (!isRunning) {
+                        clearInterval(loopInterval);
+                        return;
+                    }
+                    
+                    try {
+                        if (isVideo) {
+                            done += 6; 
+                            const timestamp = Math.min(needed, done + Math.random());
+                            
+                            const res = await fetch('/api/quest/progress_video', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ token: currentToken, id: activeQuest.id, timestamp: timestamp })
+                            });
+                            const data = await res.json();
+                            
+                            if (data.completed || timestamp >= needed) {
+                                clearInterval(loopInterval);
+                                appendLog(`✅ Hoàn thành: ${activeQuest.name}`, "ok");
+                                setTimeout(initQuestFlow, 2000); 
+                                return;
+                            }
+                            appendLog(`🎬 Video: ${Math.min(needed, Math.round(timestamp))}/${needed}s`, "progress");
+                        } else {
+                            const res = await fetch('/api/quest/heartbeat', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ 
+                                    token: currentToken, 
+                                    id: activeQuest.id, 
+                                    stream_key: activeQuest.stream_key,
+                                    task_type: activeQuest.task_type
+                                })
+                            });
+                            const data = await res.json();
+                            if (data.done !== -1) done = data.done;
+                            
+                            if (data.completed || done >= needed) {
+                                clearInterval(loopInterval);
+                                appendLog(`✅ Hoàn thành: ${activeQuest.name}`, "ok");
+                                setTimeout(initQuestFlow, 2000);
+                                return;
+                            }
+                            appendLog(`🎮 Heartbeat: ${Math.round(done)}/${needed}s`, "progress");
+                        }
+                    } catch (e) {
+                        // ignore network errors and retry next tick
+                    }
+                }, intervalMs);
+                
+                appendLog(isVideo ? `🎬 Video đang chạy... (${done}/${needed}s)` : `🎮 Heartbeat đang gửi... (${done}/${needed}s)`, "info");
+            }
+
         });
     </script>
 </body>

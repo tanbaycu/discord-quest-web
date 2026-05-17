@@ -173,12 +173,9 @@ def get_seconds_done(quest: dict) -> float:
     progress = us.get("progress", {})
     return progress.get(task_type, {}).get("value", 0)
 
-class QuestAutocompleter:
-    def __init__(self, api: DiscordAPI, log_func, is_running_func):
+class StatelessQuestCompleter:
+    def __init__(self, api: DiscordAPI):
         self.api = api
-        self.log = log_func
-        self.is_running = is_running_func
-        self.completed_ids = set()
 
     def fetch_quests(self) -> list:
         try:
@@ -187,20 +184,14 @@ class QuestAutocompleter:
                 data = r.json()
                 if isinstance(data, dict): return data.get("quests", [])
                 elif isinstance(data, list): return data
-            elif r.status_code == 429:
-                wait = r.json().get("retry_after", 10)
-                self.log(f"Rate limited – chờ {wait}s", "warn")
-                time.sleep(min(wait, 5))
             return []
-        except Exception as e:
-            self.log(f"Lỗi lấy quests: {e}", "error")
+        except Exception:
             return []
 
     def enroll_quest(self, quest: dict):
-        name = get_quest_name(quest)
         qid = quest["id"]
         try:
-            r = self.api.post(f"/quests/{qid}/enroll", {
+            self.api.post(f"/quests/{qid}/enroll", {
                 "location": 11,
                 "is_targeted": False,
                 "metadata_raw": None,
@@ -208,110 +199,43 @@ class QuestAutocompleter:
                 "traffic_metadata_raw": quest.get("traffic_metadata_raw"),
                 "traffic_metadata_sealed": quest.get("traffic_metadata_sealed"),
             })
-            if r.status_code in (200, 201, 204):
-                self.log(f"Đã nhận: {name}", "ok")
-                return True
-        except Exception as e:
-            self.log(f"Lỗi nhận {name}: {e}", "error")
-        return False
+            return True
+        except:
+            return False
 
-    def do_pass(self):
+    def get_actionable_quest(self) -> dict:
         quests = self.fetch_quests()
-        if not quests:
-            self.log("Không có quest nào.", "info")
-            return
+        if not quests: return None
 
-        # Auto accept
+        enrolled_any = False
         for q in quests:
-            if not self.is_running(): return
             if not is_enrolled(q) and not is_completed(q) and is_completable(q):
                 self.enroll_quest(q)
-                time.sleep(2)
+                enrolled_any = True
                 
-        quests = self.fetch_quests()
-        actionable = [q for q in quests if is_enrolled(q) and not is_completed(q) and is_completable(q) and q.get("id") not in self.completed_ids]
+        if enrolled_any:
+            quests = self.fetch_quests()
 
-        if not actionable:
-            self.log("Không có quest nào cần hoàn thành lúc này.", "info")
-            return
+        for q in quests:
+            if is_enrolled(q) and not is_completed(q) and is_completable(q):
+                return q
+        return None
 
-        for q in actionable:
-            if not self.is_running(): return
-            self.process_quest(q)
+    def send_video_progress(self, qid: str, timestamp: float) -> dict:
+        try:
+            r = self.api.post(f"/quests/{qid}/video-progress", {"timestamp": timestamp})
+            if r.status_code == 200:
+                return r.json()
+        except:
+            pass
+        return {}
 
-    def process_quest(self, quest: dict):
-        task_type = get_task_type(quest)
-        name = get_quest_name(quest)
-        qid = quest["id"]
-        
-        self.log(f"Bắt đầu: {name} ({task_type})", "info")
-        
-        if task_type in ("WATCH_VIDEO", "WATCH_VIDEO_ON_MOBILE"):
-            self.complete_video(quest)
-        elif task_type in ("PLAY_ON_DESKTOP", "STREAM_ON_DESKTOP", "PLAY_ACTIVITY"):
-            self.complete_heartbeat(quest, task_type)
-            
-        self.completed_ids.add(qid)
+    def send_heartbeat(self, qid: str, stream_key: str, terminal: bool = False) -> dict:
+        try:
+            r = self.api.post(f"/quests/{qid}/heartbeat", {"stream_key": stream_key, "terminal": terminal})
+            if r.status_code == 200:
+                return r.json()
+        except:
+            pass
+        return {}
 
-    def complete_video(self, quest: dict):
-        name = get_quest_name(quest)
-        qid = quest["id"]
-        needed = get_seconds_needed(quest)
-        done = get_seconds_done(quest)
-        
-        speed = 7
-        interval = 1
-        
-        self.log(f"🎬 Video: {name} ({done:.0f}/{needed}s)", "info")
-        while done < needed and self.is_running():
-            timestamp = done + speed
-            try:
-                r = self.api.post(f"/quests/{qid}/video-progress", {"timestamp": min(needed, timestamp + random.random())})
-                if r.status_code == 200:
-                    if r.json().get("completed_at"):
-                        self.log(f"✅ Hoàn thành: {name}", "ok")
-                        return
-                    done = min(needed, timestamp)
-                    self.log(f"  [{name}] {done:.0f}/{needed}s", "progress")
-            except: pass
-            
-            if timestamp >= needed: break
-            time.sleep(interval)
-            
-        if self.is_running():
-            self.api.post(f"/quests/{qid}/video-progress", {"timestamp": needed})
-            self.log(f"✅ Hoàn thành: {name}", "ok")
-
-    def complete_heartbeat(self, quest: dict, task_type: str):
-        name = get_quest_name(quest)
-        qid = quest["id"]
-        needed = get_seconds_needed(quest)
-        done = get_seconds_done(quest)
-        
-        self.log(f"🎮 {task_type}: {name} (cần {needed}s)", "info")
-        pid = random.randint(1000, 30000)
-        stream_key = f"call:0:{pid}" if "DESKTOP" in task_type else "call:0:1"
-        
-        while done < needed and self.is_running():
-            try:
-                r = self.api.post(f"/quests/{qid}/heartbeat", {"stream_key": stream_key, "terminal": False})
-                if r.status_code == 200:
-                    body = r.json()
-                    pd = body.get("progress", {})
-                    if pd and task_type in pd:
-                        done = pd[task_type].get("value", done)
-                    self.log(f"  [{name}] {done:.0f}/{needed}s", "progress")
-                    if body.get("completed_at") or done >= needed:
-                        self.log(f"✅ Hoàn thành: {name}", "ok")
-                        return
-                elif r.status_code == 429:
-                    time.sleep(r.json().get("retry_after", 10))
-            except: pass
-            
-            for _ in range(20): # HEARTBEAT_INTERVAL
-                if not self.is_running(): return
-                time.sleep(1)
-                
-        if self.is_running():
-            self.api.post(f"/quests/{qid}/heartbeat", {"stream_key": stream_key, "terminal": True})
-            self.log(f"✅ Hoàn thành: {name}", "ok")

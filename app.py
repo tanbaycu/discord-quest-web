@@ -1,129 +1,116 @@
 import os
-import threading
-import time
+import random
 from flask import Flask, render_template, request, jsonify
-from datetime import datetime
-
-from core import DiscordAPI, QuestAutocompleter, fetch_latest_build_number
+from core import DiscordAPI, StatelessQuestCompleter, fetch_latest_build_number, get_quest_name, get_task_type, get_seconds_needed, get_seconds_done
 
 app = Flask(__name__)
 
-# Global store for bots: token -> BotManager
-bots = {}
+# Global cache for build number to speed up Vercel execution
+cached_build_number = None
 
-class BotManager:
-    def __init__(self, token):
-        self.token = token
-        self.logs = []
-        self.running = False
-        self.thread = None
-        self.completer = None
-
-    def start(self):
-        if self.running: return
-        self.running = True
-        self.logs = []
-        self.thread = threading.Thread(target=self.run_loop)
-        self.thread.daemon = True
-        self.thread.start()
-
-    def stop(self):
-        self.running = False
-        self.log_callback("Đang yêu cầu dừng...", "warn")
-
-    def is_running(self):
-        return self.running
-
-    def log_callback(self, msg, level="info"):
-        ts = datetime.now().strftime("%H:%M:%S")
-        self.logs.append({"ts": ts, "msg": msg, "level": level})
-        if len(self.logs) > 300:
-            self.logs.pop(0)
-            
-    def get_logs(self, start_idx=0):
-        return self.logs[start_idx:]
-
-    def run_loop(self):
-        try:
-            self.log_callback("Đang khởi tạo bot...", "info")
-            build_number = fetch_latest_build_number(self.log_callback)
-            api = DiscordAPI(self.token, build_number, self.log_callback)
-            
-            if not api.validate_token():
-                self.log_callback("Token không hợp lệ, dừng bot.", "error")
-                self.running = False
-                return
-                
-            self.completer = QuestAutocompleter(api, self.log_callback, self.is_running)
-            
-            cycle = 0
-            while self.running:
-                cycle += 1
-                self.log_callback(f"── Quét lần #{cycle} ──", "info")
-                self.completer.do_pass()
-                
-                # Wait before next poll
-                for _ in range(60):
-                    if not self.running: break
-                    time.sleep(1)
-                    
-        except Exception as e:
-            self.log_callback(f"Lỗi: {e}", "error")
-        finally:
-            self.running = False
-            self.log_callback("Bot đã dừng.", "warn")
+def get_build_number():
+    global cached_build_number
+    if not cached_build_number:
+        # Dummy log function for fetch
+        cached_build_number = fetch_latest_build_number(lambda msg, level: None)
+    return cached_build_number
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/api/start", methods=["POST"])
-def start_bot():
+@app.route("/api/quest/init", methods=["POST"])
+def init_quest():
     data = request.json
     token = data.get("token")
     if not token:
-        return jsonify({"error": "Token is required"}), 400
-        
-    if token not in bots:
-        bots[token] = BotManager(token)
-        
-    bot = bots[token]
-    if not bot.running:
-        bot.start()
-        return jsonify({"message": "Started", "status": "running"})
-    return jsonify({"message": "Already running", "status": "running"})
+        return jsonify({"error": "Token is required", "status": "error"}), 400
 
-@app.route("/api/stop", methods=["POST"])
-def stop_bot():
+    build_number = get_build_number()
+    api = DiscordAPI(token, build_number, lambda msg, level: None)
+    
+    if not api.validate_token():
+        return jsonify({"error": "Token không hợp lệ", "status": "error"}), 401
+
+    completer = StatelessQuestCompleter(api)
+    active_quest = completer.get_actionable_quest()
+    
+    if not active_quest:
+        return jsonify({"status": "no_quests", "message": "Không có quest nào cần làm lúc này."})
+        
+    task_type = get_task_type(active_quest)
+    name = get_quest_name(active_quest)
+    needed = get_seconds_needed(active_quest)
+    done = get_seconds_done(active_quest)
+    qid = active_quest["id"]
+    
+    # Pre-generate stream key for games
+    pid = random.randint(1000, 30000)
+    stream_key = f"call:0:{pid}" if "DESKTOP" in task_type else "call:0:1"
+    
+    return jsonify({
+        "status": "active",
+        "quest": {
+            "id": qid,
+            "name": name,
+            "task_type": task_type,
+            "needed": needed,
+            "done": done,
+            "stream_key": stream_key
+        }
+    })
+
+@app.route("/api/quest/progress_video", methods=["POST"])
+def progress_video():
     data = request.json
     token = data.get("token")
-    if not token or token not in bots:
-        return jsonify({"error": "Bot not found"}), 404
+    qid = data.get("id")
+    timestamp = data.get("timestamp")
+    
+    if not token or not qid or timestamp is None:
+        return jsonify({"error": "Missing params"}), 400
         
-    bot = bots[token]
-    bot.stop()
-    return jsonify({"message": "Stopped", "status": "stopped"})
-
-@app.route("/api/status", methods=["GET"])
-def get_status():
-    token = request.args.get("token")
-    if not token or token not in bots:
-        return jsonify({"status": "stopped"})
-    return jsonify({"status": "running" if bots[token].running else "stopped"})
-
-@app.route("/api/logs", methods=["GET"])
-def get_logs():
-    token = request.args.get("token")
-    start_idx = int(request.args.get("start", 0))
-    if not token or token not in bots:
-        return jsonify({"logs": [], "next_idx": start_idx})
-        
-    bot = bots[token]
-    logs = bot.get_logs(start_idx)
+    build_number = get_build_number()
+    api = DiscordAPI(token, build_number, lambda msg, level: None)
+    completer = StatelessQuestCompleter(api)
+    
+    res = completer.send_video_progress(qid, timestamp)
+    completed = bool(res.get("completed_at"))
+    
     return jsonify({
-        "logs": logs,
-        "next_idx": start_idx + len(logs)
+        "status": "ok",
+        "completed": completed
+    })
+
+@app.route("/api/quest/heartbeat", methods=["POST"])
+def progress_heartbeat():
+    data = request.json
+    token = data.get("token")
+    qid = data.get("id")
+    stream_key = data.get("stream_key")
+    task_type = data.get("task_type")
+    
+    if not token or not qid or not stream_key or not task_type:
+        return jsonify({"error": "Missing params"}), 400
+        
+    build_number = get_build_number()
+    api = DiscordAPI(token, build_number, lambda msg, level: None)
+    completer = StatelessQuestCompleter(api)
+    
+    res = completer.send_heartbeat(qid, stream_key, terminal=False)
+    
+    completed = bool(res.get("completed_at"))
+    new_done = -1
+    pd = res.get("progress", {})
+    if pd and task_type in pd:
+        new_done = pd[task_type].get("value", -1)
+        
+    return jsonify({
+        "status": "ok",
+        "completed": completed,
+        "done": new_done
     })
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
+
