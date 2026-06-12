@@ -1,53 +1,76 @@
 <div align="center">
-  <img src="./static/logo.png" alt="Discord Quest Web Logo" width="120" />
-  <h1>Discord Quest Auto <br/> <sup>Web UI Edition 🚀</sup></h1>
-  <p>
-    Tự động hóa hoàn toàn quá trình stream nhận thưởng Discord Quest với giao diện Web siêu việt.
+  <img src="https://raw.githubusercontent.com/tanbaycu/discord-quest-web/main/static/logo.png" alt="Discord Quest Web Logo" width="150" />
+  <h1>🚀 Discord Quest Auto <br/> <span style="color: #00e676;">Web UI Edition V2.0</span></h1>
+  
+  <p align="center">
+    <b>🏆 Giải pháp tối thượng để farm phần thưởng Discord Quest hoàn toàn tự động!</b>
   </p>
-  <p>
-    <b>An Toàn</b> • <b>Không Cài Game</b> • <b>Không Cần Treo Máy</b>
+  
+  <p align="center">
+    <img src="https://img.shields.io/badge/Status-Active-success.svg?style=for-the-badge&logo=discord" alt="Status">
+    <img src="https://img.shields.io/badge/Security-100%25_Safe-blue.svg?style=for-the-badge" alt="Security">
+    <img src="https://img.shields.io/badge/UI-Remastered-purple.svg?style=for-the-badge" alt="UI">
+    <img src="https://img.shields.io/badge/License-Non_Commercial-red.svg?style=for-the-badge" alt="License">
   </p>
 </div>
 
 ---
 
-## ✨ Tính Năng Nổi Bật (Features)
+## 🔥 Đột Phá Công Nghệ (Why Choose This?)
 
-- 🎨 **Web UI Hiện Đại:** Giao diện tối giản, sang trọng (Glassmorphism), mượt mà nhờ Lenis scroll và TailwindCSS.
-- ⚡ **Zero Setup:** Không cần cài đặt game, không tải thêm phần mềm nặng nề. Mọi thứ được xử lý ngầm qua API.
-- 🔒 **An Toàn Tuyệt Đối:** Request được mã hóa trực tiếp thông qua token định danh cá nhân của bạn. Không lưu trữ token, an toàn 100%.
-- 📡 **Real-time Console:** Theo dõi trực tiếp tiến trình auto (nhận quest, xem video, stream) ngay trên trình duyệt với terminal log sinh động.
-- 📱 **Fully Responsive:** Hoạt động hoàn hảo trên mọi thiết bị (PC, Tablet, Mobile).
+Tạm biệt những ngày tháng tải game hàng chục GB, lụi cụi mở game treo máy tốn điện, hay căng mắt nhìn những dòng code khô khan trên cửa sổ đen sì (CLI). Bản **Web UI Remastered** mang đến trải nghiệm Đỉnh Cao (Peak Experience):
 
----
-
-## 🚀 Hướng Dẫn Sử Dụng (How to Use)
-
-### 1. Triển Khai (Deploy)
-Dự án được viết bằng Python (Flask) và đã cấu hình sẵn để dễ dàng deploy:
-- **Local:** `pip install -r requirements.txt` sau đó chạy `python app.py` -> Mở `http://localhost:5000`
-- **Cloud:** Sẵn sàng deploy lên Render, Railway, hoặc VPS (Lưu ý: Nếu dùng Vercel, tiến trình background có thể bị ngắt do giới hạn Serverless).
-
-### 2. Cách Lấy Token Discord
-1. Mở Discord Web trên trình duyệt và đăng nhập.
-2. Bật công cụ Developer Tools (`F12` hoặc `Ctrl+Shift+I`) -> Chọn tab **Network**.
-3. Gõ `/api/` vào ô Filter.
-4. Click vào một request bất kỳ (VD: _science_), tìm dòng `Authorization` ở phần **Request Headers** và copy đoạn mã.
-5. Dán vào hệ thống Web UI để bắt đầu tự động hóa!
+- 🎨 **Giao Diện Siêu Việt (Glassmorphism):** Trải nghiệm thị giác đỉnh cao với dark mode huyền bí, hiệu ứng bóng kính sang trọng và animation mượt mà (Lenis Scroll).
+- ⚡ **Zero Setup & Cloud-Based:** Không cài thêm bất cứ phần mềm hay game nào. Chạy trực tiếp trên trình duyệt, có thể host lên server để tự farm 24/7.
+- 🔰 **Bookmarklet Tiên Tiến (1-Click Token):** Không cần F12, không cần Developer Console. Lấy Token Discord chỉ với 1 cú kéo thả Dấu Trang (Bookmark) hoặc 1 nút bấm trên điện thoại.
+- 🎮 **Bảng Điều Khiển Console Sinh Động:** Terminal log ngay trên nền web với Progress Bar (thanh tiến trình) và các thông báo "chuẩn game thủ" tấu hài cực mạnh.
+- 🔒 **Bảo Mật Tối Đa:** Token của bạn **chỉ tồn tại trên RAM trình duyệt của bạn**. Mã nguồn mở cam kết 100% không lưu trữ, không gửi Token về bất kỳ máy chủ nào khác ngoài Discord.
 
 ---
 
-## 🛠️ Công Nghệ Sử Dụng (Tech Stack)
+## 🚀 Hướng Dẫn Khởi Động Nhanh (Quick Start)
 
-- **Backend:** Python 3, Flask, Requests
-- **Frontend:** HTML5, TailwindCSS, Vanilla JS, Lenis Scroll
-- **Tối Ưu Hoá:** Tích hợp SEO Meta Tags, Open Graph
+### 1. Trải Nghiệm & Lấy Token (Dành cho Người Dùng)
+1. Truy cập vào trang web của chúng tôi (hoặc localhost nếu bạn tự host).
+2. Tới phần **Hướng dẫn lấy Token** -> Chọn phương pháp cực dễ:
+   - **🖥️ PC:** Nắm kéo nút xanh lên thanh Bookmark (Dấu trang) -> Qua tab Discord bấm 1 phát lấy token luôn!
+   - **📱 Mobile:** Copy đoạn mã -> Qua tab Discord -> Gõ `javascript:` vào thanh địa chỉ rồi dán mã vào là xong!
+3. Dán Token vào Web và nhấn **🚀 START QUEST**. Xong! Ngồi rung đùi húp quà.
+
+### 2. Triển Khai (Dành cho Admin / Developer)
+Dự án được tối ưu siêu nhẹ bằng Python (Flask) để dễ dàng deploy lên bất kỳ đâu:
+```bash
+# 1. Clone repository
+git clone https://github.com/tanbaycu/discord-quest-web.git
+cd discord-quest-web
+
+# 2. Cài đặt thư viện
+pip install -r requirements.txt
+
+# 3. Chạy server
+python app.py
+```
+> 👉 *Truy cập `http://localhost:5000` và tận hưởng! Phù hợp deploy lên Render, Railway, VPS, Heroku...*
 
 ---
 
-## 📝 Bản Quyền & Tác Giả (Credits)
+## 🛠️ Công Nghệ Lõi (Tech Stack)
 
-- **Original CLI Script:** [@thanhdo1110](https://github.com/thanhdo1110/Discord-Quest-Auto-Completer) - Tác giả của lõi logic CLI gốc. 
-- **Web UI Remaster:** [@tanbaycu](https://github.com/tanbaycu) - Thiết kế, tối ưu hoá và phát triển toàn bộ giao diện Web UI.
+- **Backend:** Python 3, Flask, Requests (Siêu nhẹ, tốc độ phản hồi tính bằng ms)
+- **Frontend:** HTML5, TailwindCSS (JIT), Vanilla JS, Lenis Scroll (60fps Animation)
+- **Tối Ưu:** Responsive 100% Mobile First, SEO Meta Tags đầy đủ.
 
-> ⚠️ **Lưu ý:** Dự án này là mã nguồn mở (Open Source) và nghiêm cấm sử dụng cho mục đích thương mại.
+---
+
+## 📝 Bản Quyền & Lời Cảm Ơn (Credits)
+
+Dự án này là sự kết tinh từ đam mê mã nguồn mở:
+- 👑 **Original CLI Core:** [@thanhdo1110](https://github.com/thanhdo1110/Discord-Quest-Auto-Completer) - Tác giả của bộ khung logic gửi gói tin siêu việt. Đừng quên cho bác ấy 1 sao nhé!
+- 🎨 **Web UI & UX Remaster:** [@tanbaycu](https://github.com/tanbaycu) - Đập đi xây lại toàn bộ giao diện, đưa trải nghiệm người dùng lên tầm cao mới với các trick lấy token cực kỳ tiện dụng.
+
+<div align="center">
+  <br>
+  <b>Made with 💚 and ☕ by TanBayCu</b>
+  <br>
+  <i>⚠️ Lưu ý: Tuyệt đối không sử dụng dự án này cho mục đích thương mại.</i>
+</div>
