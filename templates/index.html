@@ -165,7 +165,6 @@
         @media (min-width: 768px) {
             .log-row { grid-template-columns: 85px 1fr; gap: 1.5rem; }
         }
-        .log-row:hover { background-color: rgba(0,0,0,0.02); border-radius: 4px; }
 
         .fade-in { animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
         .gsap-reveal { animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
@@ -332,7 +331,7 @@
                                     </div>
                                     <p class="text-gray-500 font-sans text-xs md:text-sm leading-relaxed">Kéo nút bên dưới thả lên<br>thanh Dấu trang (Bookmarks)</p>
                                 </div>
-                                <a href="javascript:(function(){var c=function(t){console.log('%cTOKEN CỦA BẠN: '+t,'color:green;font-size:20px;font-weight:bold;');try{var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);alert('✅ Đã auto-copy Token thành công!\n\nGiờ hãy quay lại tab web của chúng tôi và dán (Ctrl+V) nhé.')}catch(e){prompt('Token của bạn đây (Vui lòng bôi đen và nhấn Ctrl+C để copy):',t)}};try{var i=document.createElement('iframe');document.body.appendChild(i);var t=i.contentWindow.localStorage.token;i.remove();if(t)return c(t.replace(/&quot;/g,''))}catch(e){}window.webpackChunkdiscord_app.push([[Math.random()],{},(r)=>{for(var k in r.c){try{var e=r.c[k].exports,m=e&&e.default?e.default:e;if(m&&typeof m.getToken=='function'&&typeof m.setToken=='function'){var t=m.getToken();if(typeof t=='string'&&t.length>20)return c(t)}}catch(err){}}alert('❌ Không tìm thấy token. Đảm bảo bạn đang đăng nhập trên Discord Web.')}])})();" class="w-full py-3.5 bg-brand-dark hover:bg-black text-white font-bold rounded-xl font-sans text-sm uppercase tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-grab active:cursor-grabbing">
+                                <a href="javascript:(function(){var c=function(t){console.log('%cTOKEN CỦA BẠN: '+t,'color:green;font-size:20px;font-weight:bold;');try{var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);var d=document.createElement('div');d.innerHTML='<div style=&quot;position:fixed;top:20px;right:20px;background:#09090b;color:#fff;padding:16px 20px;border-radius:12px;font-family:system-ui;box-shadow:0 10px 25px rgba(0,0,0,0.5);z-index:999999;display:flex;align-items:center;gap:12px;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.2,0.8,0.2,1.2);border:1px solid #27272a&quot;><svg width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;#10b981&quot; stroke-width=&quot;2&quot;><path d=&quot;M22 11.08V12a10 10 0 1 1-5.93-9.14&quot;/><polyline points=&quot;22 4 12 14.01 9 11.01&quot;/></svg><div><div style=&quot;font-weight:600;font-size:15px;margin-bottom:4px&quot;>Đã Copy Token</div><div style=&quot;color:#a1a1aa;font-size:13px&quot;>Quay lại web Auto và dán (Ctrl+V) nhé!</div></div></div>';document.body.appendChild(d);var a=d.firstChild;setTimeout(function(){a.style.transform='translateX(0)'},10);setTimeout(function(){a.style.transform='translateX(120%)';setTimeout(function(){d.remove()},500)},4000)}catch(e){prompt('Token của bạn đây (Vui lòng bôi đen và nhấn Ctrl+C để copy):',t)}};try{var i=document.createElement('iframe');document.body.appendChild(i);var t=i.contentWindow.localStorage.token;i.remove();if(t)return c(t.replace(/&quot;/g,''))}catch(e){}window.webpackChunkdiscord_app.push([[Math.random()],{},(r)=>{for(var k in r.c){try{var e=r.c[k].exports,m=e&&e.default?e.default:e;if(m&&typeof m.getToken=='function'&&typeof m.setToken=='function'){var t=m.getToken();if(typeof t=='string'&&t.length>20)return c(t)}}catch(err){}}alert('❌ Không tìm thấy token. Đảm bảo bạn đang đăng nhập trên Discord Web.')}])})();" class="w-full py-3.5 bg-brand-dark hover:bg-black text-white font-bold rounded-xl font-sans text-sm uppercase tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-grab active:cursor-grabbing">
                                     <i data-lucide="bookmark" class="w-4 h-4"></i>
                                     Lấy Token Discord
                                 </a>
@@ -630,7 +629,7 @@
 
             if (copyMobileBtn) {
                 copyMobileBtn.addEventListener('click', async () => {
-                    const codeToCopy = "(function(){var c=function(t){console.log('%cTOKEN CỦA BẠN: '+t,'color:green;font-size:20px;font-weight:bold;');try{var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);alert('✅ Đã auto-copy Token thành công!\\n\\nGiờ hãy quay lại tab web của chúng tôi và dán nhé.')}catch(e){prompt('Token của bạn đây (Sao chép đoạn dưới):',t)}};try{var i=document.createElement('iframe');document.body.appendChild(i);var t=i.contentWindow.localStorage.token;i.remove();if(t)return c(t.replace(/\"/g,''))}catch(e){}window.webpackChunkdiscord_app.push([[Math.random()],{},(r)=>{for(var k in r.c){try{var e=r.c[k].exports,m=e&&e.default?e.default:e;if(m&&typeof m.getToken=='function'&&typeof m.setToken=='function'){var t=m.getToken();if(typeof t=='string'&&t.length>20)return c(t)}}catch(err){}}alert('❌ Không tìm thấy token. Đảm bảo bạn đang đăng nhập trên Discord Web.')}])})();";
+                    const codeToCopy = "(function(){var c=function(t){console.log('%cTOKEN CỦA BẠN: '+t,'color:green;font-size:20px;font-weight:bold;');try{var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);var d=document.createElement('div');d.innerHTML='<div style=\"position:fixed;top:20px;right:20px;background:#09090b;color:#fff;padding:16px 20px;border-radius:12px;font-family:system-ui;box-shadow:0 10px 25px rgba(0,0,0,0.5);z-index:999999;display:flex;align-items:center;gap:12px;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.2,0.8,0.2,1.2);border:1px solid #27272a\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#10b981\" stroke-width=\"2\"><path d=\"M22 11.08V12a10 10 0 1 1-5.93-9.14\"/><polyline points=\"22 4 12 14.01 9 11.01\"/></svg><div><div style=\"font-weight:600;font-size:15px;margin-bottom:4px\">Đã Copy Token</div><div style=\"color:#a1a1aa;font-size:13px\">Quay lại web Auto và dán (Ctrl+V) nhé!</div></div></div>';document.body.appendChild(d);var a=d.firstChild;setTimeout(function(){a.style.transform='translateX(0)'},10);setTimeout(function(){a.style.transform='translateX(120%)';setTimeout(function(){d.remove()},500)},4000)}catch(e){prompt('Token của bạn đây (Sao chép đoạn dưới):',t)}};try{var i=document.createElement('iframe');document.body.appendChild(i);var t=i.contentWindow.localStorage.token;i.remove();if(t)return c(t.replace(/\"/g,''))}catch(e){}window.webpackChunkdiscord_app.push([[Math.random()],{},(r)=>{for(var k in r.c){try{var e=r.c[k].exports,m=e&&e.default?e.default:e;if(m&&typeof m.getToken=='function'&&typeof m.setToken=='function'){var t=m.getToken();if(typeof t=='string'&&t.length>20)return c(t)}}catch(err){}}alert('❌ Không tìm thấy token. Đảm bảo bạn đang đăng nhập trên Discord Web.')}])})();";
                     try {
                         await navigator.clipboard.writeText(codeToCopy);
                         const textEl = document.getElementById('copy-mobile-text');
@@ -996,7 +995,7 @@
                             }
                             const pct = Math.min(100, Math.round((timestamp / needed) * 100));
                             const bar = getProgressBar(timestamp, needed);
-                            const funMsgs = ["Đang dán mắt vào stream...", "Cố tỏ ra hiểu nội dung...", "Mắt không chớp...", "Sắp xong rồi, ráng lên..."];
+                            const funMsgs = ["Đồng bộ tín hiệu Video Stream...", "Bảo trì kết nối Server...", "Duy trì luồng dữ liệu giả lập...", "Đang phân tích gói tin..."];
                             const randomMsg = funMsgs[Math.floor(Math.random() * funMsgs.length)];
                             appendLog(`🎬 ${bar} ${pct}% | ${randomMsg}`, "progress");
                         } else {
@@ -1011,7 +1010,11 @@
                                 })
                             });
                             const data = await res.json();
-                            if (data.done !== -1) done = data.done;
+                            if (data.done !== -1) {
+                                done = data.done;
+                            } else {
+                                done += 20; // Fallback local estimation if backend doesn't return progress
+                            }
                             
                             if (data.completed || done >= needed) {
                                 timerWorker.postMessage({ command: 'stop' });
@@ -1023,7 +1026,7 @@
                             
                             const pct = Math.min(100, Math.round((done / needed) * 100));
                             const bar = getProgressBar(done, needed);
-                            const funMsgs = ["Núp bụi chờ thời...", "Farm rừng cháy máy...", "Ping 999ms nhưng vẫn múa...", "Vừa treo máy vừa uống trà sữa...", "KDA 0/10/0 nhưng nhận quà..."];
+                            const funMsgs = ["Gửi tín hiệu Heartbeat thành công...", "Đồng bộ tiến trình chơi Game...", "Duy trì kết nối Gateway...", "Trạng thái Client hợp lệ..."];
                             const randomMsg = funMsgs[Math.floor(Math.random() * funMsgs.length)];
                             appendLog(`🎮 ${bar} ${pct}% | ${randomMsg}`, "progress");
                         }

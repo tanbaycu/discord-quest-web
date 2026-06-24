@@ -233,8 +233,10 @@ class StatelessQuestCompleter:
     def send_heartbeat(self, qid: str, stream_key: str, terminal: bool = False) -> dict:
         try:
             r = self.api.post(f"/quests/{qid}/heartbeat", {"stream_key": stream_key, "terminal": terminal})
-            if r.status_code == 200:
-                return r.json()
+            if r.status_code in (200, 202):
+                if r.text:
+                    return r.json()
+                return {"status": "ok"}
         except:
             pass
         return {}
