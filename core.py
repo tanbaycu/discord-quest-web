@@ -173,6 +173,16 @@ def get_seconds_done(quest: dict) -> float:
     progress = us.get("progress", {})
     return progress.get(task_type, {}).get("value", 0)
 
+def is_expired(quest: dict) -> bool:
+    cfg = quest.get("config", {})
+    expires_at = cfg.get("expiresAt") or cfg.get("expires_at")
+    if not expires_at: return False
+    try:
+        dt = datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
+        return dt < datetime.now(timezone.utc)
+    except:
+        return False
+
 class StatelessQuestCompleter:
     def __init__(self, api: DiscordAPI):
         self.api = api
@@ -209,7 +219,7 @@ class StatelessQuestCompleter:
 
         enrolled_any = False
         for q in quests:
-            if not is_enrolled(q) and not is_completed(q) and is_completable(q):
+            if not is_enrolled(q) and not is_completed(q) and is_completable(q) and not is_expired(q):
                 self.enroll_quest(q)
                 enrolled_any = True
                 
@@ -217,7 +227,7 @@ class StatelessQuestCompleter:
             quests = self.fetch_quests()
 
         for q in quests:
-            if is_enrolled(q) and not is_completed(q) and is_completable(q):
+            if is_enrolled(q) and not is_completed(q) and is_completable(q) and not is_expired(q):
                 return q
         return None
 
