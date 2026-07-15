@@ -3,3 +3,7 @@ __pycache__/
 .venv/
 .env
 github_follow_bot.py
+node_modules/
+**/node_modules/
+telegram-bot/
+
