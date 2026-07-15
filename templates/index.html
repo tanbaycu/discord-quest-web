@@ -17,7 +17,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -80,11 +79,11 @@
         }
 
         .glass-panel {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.85);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255,255,255,1);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255,255,255,1);
             border-radius: 2rem;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -147,6 +146,9 @@
             font-size: clamp(0.75rem, 1vw, 0.95rem);
             line-height: 1.8;
             scroll-behavior: smooth;
+            transform: translate3d(0, 0, 0);
+            will-change: scroll-position;
+            backface-visibility: hidden;
         }
 
         .log-row {
@@ -173,8 +175,8 @@
 
         .pulse-text { animation: pulseText 2s infinite; }
         @keyframes pulseText {
-            0%, 100% { opacity: 1; text-shadow: 0 0 20px rgba(0,200,83,0.4); }
-            50% { opacity: 0.6; text-shadow: 0 0 0px rgba(0,200,83,0); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         @keyframes shake {
@@ -191,6 +193,8 @@
         .scanlines {
             position: relative;
             overflow: hidden;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
         }
         .scanlines::before {
             content: " ";
@@ -201,6 +205,9 @@
             z-index: 10;
             background-size: 100% 4px, 6px 100%;
             pointer-events: none;
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
+            backface-visibility: hidden;
         }
 
         .glowing-text {
@@ -221,11 +228,11 @@
 </head>
 <body class="min-h-screen overflow-x-hidden selection:bg-brand-dark selection:text-white relative font-sans">
 
-    <!-- Background Blobs (Global) - Optimized for Performance -->
+    <!-- Background Blobs (Global) - Optimized for Performance with GPU Accelerated Radial Gradients -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none opacity-40 md:opacity-60">
-        <div class="absolute top-[-10%] left-[-10%] w-[80vw] md:w-[50vw] h-[80vw] md:h-[50vw] rounded-full bg-brand-green/20 filter blur-[80px] md:blur-[100px] transform-gpu"></div>
-        <div class="absolute top-[20%] right-[-10%] w-[70vw] md:w-[45vw] h-[70vw] md:h-[45vw] rounded-full bg-brand-info/20 filter blur-[80px] md:blur-[100px] transform-gpu"></div>
-        <div class="absolute bottom-[-20%] left-[20%] w-[90vw] md:w-[60vw] h-[90vw] md:h-[60vw] rounded-full bg-purple-300/20 filter blur-[80px] md:blur-[100px] transform-gpu"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-[80vw] md:w-[50vw] h-[80vw] md:h-[50vw] rounded-full bg-[radial-gradient(circle_at_center,rgba(0,200,83,0.12)_0%,transparent_70%)] transform-gpu"></div>
+        <div class="absolute top-[20%] right-[-10%] w-[70vw] md:w-[45vw] h-[70vw] md:h-[45vw] rounded-full bg-[radial-gradient(circle_at_center,rgba(0,176,255,0.12)_0%,transparent_70%)] transform-gpu"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-[90vw] md:w-[60vw] h-[90vw] md:h-[60vw] rounded-full bg-[radial-gradient(circle_at_center,rgba(216,180,254,0.12)_0%,transparent_70%)] transform-gpu"></div>
     </div>
 
     <!-- VIEW 1: INTRO (Contains Marquee and Footer) -->
@@ -399,8 +406,11 @@
 
                 <!-- Footer Container (Glass Panel) -->
                 <div class="glass-panel rounded-[1.5rem] md:rounded-[4rem] p-5 sm:p-10 md:p-16 border border-white/60 relative overflow-hidden group shadow-2xl shadow-brand-dark/5">
-                    <!-- Decorative Gradient -->
-                    <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-brand-green/20 rounded-full blur-[60px] group-hover:bg-brand-info/30 transition-colors duration-1000 -z-10"></div>
+                    <!-- Decorative Gradient - Optimized GPU transition using Opacity Layering -->
+                    <div class="absolute -bottom-24 -right-24 w-64 h-64 -z-10">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,200,83,0.15)_0%,transparent_70%)] transition-opacity duration-1000 group-hover:opacity-0"></div>
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,176,255,0.2)_0%,transparent_70%)] opacity-0 transition-opacity duration-1000 group-hover:opacity-100"></div>
+                    </div>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-end">
                         
@@ -564,23 +574,14 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Init Lenis
-            const lenis = new Lenis({
-                duration: 1.2,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
-            });
-
-            function raf(time) {
-                lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
-            requestAnimationFrame(raf);
-            
-            // Anchor links with Lenis
+            // Native Smooth Scroll for Anchors
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    lenis.scrollTo(this.getAttribute('href'));
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
                 });
             });
 
@@ -702,7 +703,7 @@
                 viewIntro.classList.add('hidden');
                 viewApp.classList.remove('hidden');
                 viewApp.classList.add('flex');
-                lenis.scrollTo(0, { immediate: true });
+                window.scrollTo(0, 0);
                 
                 if (!currentToken) {
                     tokenInput.focus();
@@ -720,7 +721,7 @@
                     viewApp.classList.add('hidden');
                     viewApp.classList.remove('flex');
                     viewIntro.classList.remove('hidden');
-                    lenis.scrollTo(0, { immediate: true });
+                    window.scrollTo(0, 0);
                 });
             }
 
