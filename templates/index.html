@@ -465,12 +465,15 @@
                     </a>
                 </nav>
                 
-                <!-- Action Buttons -->
+                <!-- Action Buttons (GitHub Stars 3D Button) -->
                 <div class="flex items-center gap-3">
-                    <button class="open-app-trigger btn-3d-dark py-1.5 px-3 md:py-2 md:px-4 text-[10px] md:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
-                        <span class="md:hidden">MỞ APP ⚡</span>
-                        <span class="hidden md:inline">TRUY CẬP HỆ THỐNG 🚀</span>
-                    </button>
+                    <a id="github-stars-btn" href="https://github.com/thanhdo1110/Discord-Quest-Auto-Completer" target="_blank" class="btn-3d-dark py-1.5 px-3 md:py-2.5 md:px-5 text-[10px] md:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all">
+                        <svg class="w-4 h-4 fill-current flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                        </svg>
+                        <span class="hidden sm:inline">GitHub Repo</span>
+                        <span id="github-stars-count" class="bg-white/20 text-white px-2 py-0.5 rounded-full text-[9px] font-extrabold ml-1">★ Star</span>
+                    </a>
                 </div>
             </div>
         </header>
@@ -479,8 +482,8 @@
         <section class="flex flex-col justify-center items-center px-5 pt-28 md:pt-36 pb-16 md:pb-24 max-w-[1600px] mx-auto w-full relative flex-1">
             <div class="max-w-5xl flex flex-col items-center text-center gsap-reveal stagger-1 z-10">
                 
-                <!-- 3D Pill Badge (As requested: badge + text + arrow) -->
-                <div class="open-app-trigger inline-flex items-center bg-[#09090B] border border-zinc-800 text-white rounded-full p-1 pr-3 md:p-1.5 md:pr-4 shadow-[0_3px_0_#000000] md:shadow-[0_4px_0_#000000] hover:translate-y-0.5 hover:shadow-[0_1.5px_0_#000000] md:hover:shadow-[0_2px_0_#000000] active:translate-y-1 active:shadow-none transition-all duration-100 cursor-pointer mb-8 md:mb-10 transform-gpu">
+                <!-- 3D Pill Badge linking to tanbaycu.is-a.dev -->
+                <a href="https://tanbaycu.is-a.dev" target="_blank" class="inline-flex items-center bg-[#09090B] border border-zinc-800 text-white rounded-full p-1 pr-3 md:p-1.5 md:pr-4 shadow-[0_3px_0_#000000] md:shadow-[0_4px_0_#000000] hover:translate-y-0.5 hover:shadow-[0_1.5px_0_#000000] md:hover:shadow-[0_2px_0_#000000] active:translate-y-1 active:shadow-none transition-all duration-100 cursor-pointer mb-8 md:mb-10 transform-gpu">
                     <span class="bg-white text-black text-[8px] md:text-[10px] font-extrabold uppercase px-2 py-0.5 md:px-3 md:py-1 rounded-full flex items-center gap-1 shadow-sm flex-shrink-0">
                         🔥 RELEASE
                     </span>
@@ -490,7 +493,7 @@
                     <span class="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white text-black flex items-center justify-center ml-2 md:ml-4 shadow-sm hover:scale-105 transition-transform flex-shrink-0">
                         <i data-lucide="arrow-up-right" class="w-3 h-3 md:w-3.5 md:h-3.5"></i>
                     </span>
-                </div>
+                </a>
 
                 <!-- Epic Headline -->
                 <h1 class="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] font-black tracking-tighter text-brand-dark mb-6 md:mb-8 uppercase">
@@ -918,7 +921,7 @@
 
             if (copyMobileBtn) {
                 copyMobileBtn.addEventListener('click', async () => {
-                    const codeToCopy = "(function(){var c=function(t){console.log('%cTOKEN CỦA BẠN: '+t,'color:green;font-size:20px;font-weight:bold;');try{var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);var d=document.createElement('div');d.innerHTML='<div style=\"position:fixed;top:20px;right:20px;background:#09090b;color:#fff;padding:16px 20px;border-radius:12px;font-family:system-ui;box-shadow:0 10px 25px rgba(0,0,0,0.5);z-index:999999;display:flex;align-items:center;gap:12px;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.2,0.8,0.2,1.2);border:1px solid #27272a\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#10b981\" stroke-width=\"2\"><path d=\"M22 11.08V12a10 10 0 1 1-5.93-9.14\"/><polyline points=\"22 4 12 14.01 9 11.01\"/></svg><div><div style=\"font-weight:600;font-size:15px;margin-bottom:4px\">Đã Copy Token</div><div style=\"color:#a1a1aa;font-size:13px\">Quay lại web Auto và dán (Ctrl+V) nhé!</div></div></div>';document.body.appendChild(d);var a=d.firstChild;setTimeout(function(){a.style.transform='translateX(0)'},10);setTimeout(function(){a.style.transform='translateX(120%)';setTimeout(function(){d.remove()},500)},4000)}catch(e){prompt('Token của bạn đây (Sao chép đoạn dưới):',t)}};try{var i=document.createElement('iframe');document.body.appendChild(i);var t=i.contentWindow.localStorage.token;i.remove();if(t)return c(t.replace(/\"/g,''))}catch(e){}window.webpackChunkdiscord_app.push([[Math.random()],{},(r)=>{for(var k in r.c){try{var e=r.c[k].exports,m=e&&e.default?e.default:e;if(m&&typeof m.getToken=='function'&&typeof m.setToken=='function'){var t=m.getToken();if(typeof t=='string'&&t.length>20)return c(t)}}catch(err){}}alert('❌ Không tìm thấy token. Đảm bảo bạn đang đăng nhập trên Discord Web.')}])})();";
+                    const codeToCopy = "(function(){var c=function(t){console.log('%cTOKEN CỦA BẠN: '+t,'color:green;font-size:20px;font-weight:bold;');try{var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);var d=document.createElement('div');d.innerHTML='<div style=\"position:fixed;top:20px;right:20px;background:#09090b;color:#fff;padding:16px 22px;border-radius:16px;font-family:system-ui,-apple-system,sans-serif;box-shadow:0 10px 25px rgba(0,0,0,0.3);z-index:999999;display:flex;align-items:center;gap:14px;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);border:1px solid #27272a;border-bottom:4px solid #000000\"><div style=\"display:flex;align-items:center;justify-content:center;background:#16a34a;width:32px;height:32px;border-radius:50%;border-bottom:2px solid #14532d;flex-shrink:0\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#fff\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></div><div><div style=\"font-weight:700;font-size:15px;margin-bottom:3px;letter-spacing:0.02em\">Đã Copy Token</div><div style=\"color:#a1a1aa;font-size:12px;font-family:monospace\">Quay lại web Auto và dán (Ctrl+V) nhé!</div></div></div>';document.body.appendChild(d);var a=d.firstChild;setTimeout(function(){a.style.transform='translateX(0)'},10);setTimeout(function(){a.style.transform='translateX(120%)';setTimeout(function(){d.remove()},500)},4000)}catch(e){prompt('Token của bạn đây (Sao chép đoạn dưới):',t)}};try{var i=document.createElement('iframe');document.body.appendChild(i);var t=i.contentWindow.localStorage.token;i.remove();if(t)return c(t.replace(/\"/g,''))}catch(e){}window.webpackChunkdiscord_app.push([[Math.random()],{},(r)=>{for(var k in r.c){try{var e=r.c[k].exports,m=e&&e.default?e.default:e;if(m&&typeof m.getToken=='function'&&typeof m.setToken=='function'){var t=m.getToken();if(typeof t=='string'&&t.length>20)return c(t)}}catch(err){}}alert('❌ Không tìm thấy token. Đảm bảo bạn đang đăng nhập trên Discord Web.')}])})();";
                     try {
                         await navigator.clipboard.writeText(codeToCopy);
                         const textEl = document.getElementById('copy-mobile-text');
@@ -1392,6 +1395,22 @@
                 const filled = Math.floor(Math.min(1, current / total) * length);
                 const empty = length - filled;
                 return '[' + '█'.repeat(Math.max(0, filled)) + '░'.repeat(Math.max(0, empty)) + ']';
+            }
+
+            // Fetch GitHub Stars dynamically
+            const githubStarsBtn = document.getElementById('github-stars-btn');
+            if (githubStarsBtn) {
+                fetch('https://api.github.com/repos/thanhdo1110/Discord-Quest-Auto-Completer')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.stargazers_count !== undefined) {
+                            const starCountEl = document.getElementById('github-stars-count');
+                            if (starCountEl) {
+                                starCountEl.textContent = `★ ${data.stargazers_count}`;
+                            }
+                        }
+                    })
+                    .catch(() => {});
             }
 
         });
