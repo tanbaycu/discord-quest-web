@@ -1,19 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512">
-  <defs>
-    <mask id="slash-cut">
-      <rect width="100" height="100" fill="white" />
-      <line x1="35" y1="35" x2="95" y2="95" stroke="black" stroke-width="20" stroke-linecap="butt" />
-    </mask>
-  </defs>
+  <!-- D vertical stem -->
+  <line x1="28" y1="20" x2="28" y2="80" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
   
-  <g stroke="#ffffff" fill="none">
-    <!-- D vertical stem -->
-    <line x1="22" y1="12" x2="22" y2="88" stroke-width="6" stroke-linecap="butt" />
-    
-    <!-- D curved body with negative space cut -->
-    <path d="M 32 22 A 28 28 0 0 1 32 78" stroke-width="20" stroke-linecap="butt" mask="url(#slash-cut)" />
-    
-    <!-- Q diagonal tail -->
-    <line x1="44" y1="44" x2="84" y2="84" stroke-width="6" stroke-linecap="butt" />
-  </g>
+  <!-- D curved body looping and intersecting with Q -->
+  <path d="M 28 20 C 56 20, 56 80, 28 80" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" />
+  
+  <!-- Q perfect circular body -->
+  <circle cx="60" cy="50" r="18" stroke="#ffffff" stroke-width="6" fill="none" />
+  
+  <!-- Q diagonal stem pointing up-right representing Auto/Progress -->
+  <line x1="60" y1="50" x2="80" y2="30" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+  
+  <!-- Up-right arrowhead signature in brand green -->
+  <path d="M 68 30 H 80 V 42" stroke="#00C853" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
 </svg>
