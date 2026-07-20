@@ -79,10 +79,10 @@
         }
 
         .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.85); /* Tăng độ đục để giảm mỏi mắt và kết hợp hoàn hảo với blur thấp */
+            backdrop-filter: blur(6px); /* Giảm từ 12px xuống 6px để tối ưu GPU và mượt mà hơn khi cuộn */
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255,255,255,1);
             border-radius: 2rem;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -111,22 +111,198 @@
             border: 1px solid rgba(9, 9, 11, 0.1);
         }
 
-        .action-link {
-            display: inline-block;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2rem, 5vw, 4rem);
-            font-weight: 900;
+        /* --- STYLE 3D SKEUOMORPHIC BUTTONS --- */
+        .btn-3d-dark {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #27272a 0%, #09090b 100%);
+            border: 1px solid #3f3f46;
+            border-bottom: 5px solid #000000;
+            border-radius: 1rem;
+            color: #ffffff;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: -0.04em;
+            letter-spacing: 0.05em;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(0);
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            line-height: 1;
+        }
+        .btn-3d-dark:hover {
+            background: linear-gradient(180deg, #3f3f46 0%, #18181b 100%);
+            transform: translateY(-2px);
+            border-bottom-width: 7px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .btn-3d-dark:active {
+            transform: translateY(4px);
+            border-bottom-width: 1px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
-        .action-start { color: #09090B; }
-        .action-start:hover { color: #00C853; transform: translateX(10px); }
-        .action-stop { color: #d50000; }
-        .action-stop:hover { color: #09090B; transform: translateX(10px); }
+        .btn-3d-light {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #ffffff 0%, #f4f4f5 100%);
+            border: 1px solid #e4e4e7;
+            border-bottom: 5px solid #d4d4d8;
+            border-radius: 1rem;
+            color: #09090b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
+            transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(0);
+            cursor: pointer;
+        }
+        .btn-3d-light:hover {
+            background: linear-gradient(180deg, #f4f4f5 0%, #e4e4e7 100%);
+            transform: translateY(-2px);
+            border-bottom-width: 7px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+        .btn-3d-light:active {
+            transform: translateY(4px);
+            border-bottom-width: 1px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-3d-green {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+            border: 1px solid #86efac;
+            border-bottom: 5px solid #14532d;
+            border-radius: 1rem;
+            color: #ffffff;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 6px 12px rgba(22, 163, 74, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(0);
+            cursor: pointer;
+        }
+        .btn-3d-green:hover {
+            background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
+            transform: translateY(-2px);
+            border-bottom-width: 7px;
+            box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+        .btn-3d-green:active {
+            transform: translateY(4px);
+            border-bottom-width: 1px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-3d-red {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
+            border: 1px solid #fca5a5;
+            border-bottom: 5px solid #7f1d1d;
+            border-radius: 1rem;
+            color: #ffffff;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 6px 12px rgba(220, 38, 38, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(0);
+            cursor: pointer;
+        }
+        .btn-3d-red:hover {
+            background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+            transform: translateY(-2px);
+            border-bottom-width: 7px;
+            box-shadow: 0 8px 16px rgba(220, 38, 38, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+        .btn-3d-red:active {
+            transform: translateY(4px);
+            border-bottom-width: 1px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-3d-glass {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 5px solid rgba(0,0,0,0.5);
+            border-radius: 1rem;
+            color: #ffffff;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.1s ease;
+            transform: translateY(0);
+            cursor: pointer;
+        }
+        .btn-3d-glass:hover {
+            background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+            transform: translateY(-2px);
+            border-bottom-width: 7px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        .btn-3d-glass:active {
+            transform: translateY(4px);
+            border-bottom-width: 1px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .btn-3d-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #ffffff 0%, #f4f4f5 100%);
+            border: 1px solid #e4e4e7;
+            border-bottom: 3px solid #d4d4d8;
+            border-radius: 0.5rem;
+            color: #71717a;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.1s ease;
+            transform: translateY(0);
+            cursor: pointer;
+        }
+        .btn-3d-icon:hover {
+            color: #09090b;
+            transform: translateY(-1px);
+            border-bottom-width: 4px;
+        }
+        .btn-3d-icon:active {
+            transform: translateY(2px);
+            border-bottom-width: 1px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* --- FLOATING HEADER --- */
+        .floating-header {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .floating-header.scrolled {
+            top: 0.75rem !important;
+            width: 95% !important;
+        }
+        .floating-header.scrolled .glass-panel {
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 200, 83, 0.2);
+            box-shadow: 0 10px 30px -10px rgba(0, 200, 83, 0.15);
+        }
 
         .token-input {
             width: 100%;
@@ -193,21 +369,18 @@
         .scanlines {
             position: relative;
             overflow: hidden;
-            transform: translate3d(0, 0, 0);
-            backface-visibility: hidden;
         }
+        /* Tối ưu hóa GPU: Loại bỏ grid gradient đan chéo (gây overload render) 
+           và thay bằng các sọc quét ngang 1 chiều siêu mỏng nhẹ nhàng */
         .scanlines::before {
             content: " ";
             display: block;
             position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.03) 50%);
             z-index: 10;
-            background-size: 100% 4px, 6px 100%;
+            background-size: 100% 4px;
             pointer-events: none;
-            transform: translate3d(0, 0, 0);
-            will-change: transform;
-            backface-visibility: hidden;
         }
 
         .glowing-text {
@@ -238,37 +411,75 @@
     <!-- VIEW 1: INTRO (Contains Marquee and Footer) -->
     <div id="view-intro" class="flex flex-col w-full min-h-screen">
         
-        <!-- Ticker Top -->
-        <div class="w-full bg-brand-dark text-white py-2.5 md:py-4 overflow-hidden flex border-b-4 border-brand-green relative z-50 shadow-lg">
-            <div id="ticker-text" class="font-mono text-[0.65rem] md:text-sm tracking-[0.2em] uppercase flex items-center space-x-6 md:space-x-12 min-w-max transition-opacity duration-500 opacity-100 font-bold whitespace-nowrap px-4 md:px-8">
-                <!-- JS will populate -->
+        <!-- Floating Header -->
+        <header class="floating-header fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-6xl z-50 transition-all duration-300">
+            <div class="glass-panel px-6 py-4 flex items-center justify-between border border-white/40 shadow-lg rounded-2xl bg-white/80 backdrop-blur-md">
+                <!-- Logo / Branding -->
+                <a href="#" class="flex items-center gap-2.5 group">
+                    <span class="font-display font-black text-lg md:text-xl tracking-tighter text-brand-dark">
+                        DISCORD<span class="text-brand-green animate-pulse">QUEST</span>AUTO
+                    </span>
+                </a>
+                
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center gap-8 font-sans text-xs md:text-sm font-bold uppercase tracking-wider text-gray-500">
+                    <a href="#guide-section" class="hover:text-brand-dark transition-colors">Hướng Dẫn</a>
+                    <a href="https://t.me/ngocmaicute_bot" target="_blank" class="hover:text-brand-dark transition-colors flex items-center gap-1">
+                        Telegram <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                    </a>
+                    <a href="https://github.com/thanhdo1110/Discord-Quest-Auto-Completer" target="_blank" class="hover:text-brand-dark transition-colors flex items-center gap-1">
+                        GitHub <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                    </a>
+                </nav>
+                
+                <!-- Action Buttons -->
+                <div class="flex items-center gap-3">
+                    <button class="open-app-trigger btn-3d-dark py-2 px-4 text-xs font-bold uppercase tracking-wider">
+                        Mở App
+                    </button>
+                </div>
             </div>
-        </div>
+        </header>
 
-        <!-- Hero Section -->
-        <section class="flex flex-col justify-center px-5 py-10 md:py-24 md:px-12 lg:px-24 max-w-[1600px] mx-auto w-full relative flex-1">
-            <div class="max-w-6xl gsap-reveal stagger-1 z-10">
-                <p class="font-mono text-[0.65rem] md:text-sm tracking-[0.2em] text-brand-green font-bold mb-5 md:mb-8 flex items-center">
-                    <span class="w-6 md:w-12 h-px bg-brand-green mr-3 md:mr-4"></span> RELEASE BY tanbaycu
-                </p>
-                <h1 class="font-display text-5xl sm:text-6xl md:text-8xl lg:text-[8rem] leading-[1.1] md:leading-none font-black tracking-tight text-brand-dark mb-6 md:mb-8 break-words">
-                    Discord<br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-green to-brand-info drop-shadow-sm">Quest</span><br>
-                    Auto.
+        <!-- Hero Section (Centered E-Commerce Style) -->
+        <section class="flex flex-col justify-center items-center px-5 pt-28 md:pt-36 pb-16 md:pb-24 max-w-[1600px] mx-auto w-full relative flex-1">
+            <div class="max-w-5xl flex flex-col items-center text-center gsap-reveal stagger-1 z-10">
+                
+                <!-- 3D Pill Badge (As requested: badge + text + arrow) -->
+                <div class="open-app-trigger inline-flex items-center bg-[#09090B] border border-zinc-800 text-white rounded-full p-1.5 pr-4 shadow-[0_4px_0_#000000] hover:translate-y-0.5 hover:shadow-[0_2px_0_#000000] active:translate-y-1 active:shadow-none transition-all duration-100 cursor-pointer mb-8 md:mb-10 transform-gpu">
+                    <span class="bg-white text-black text-[9px] md:text-[10px] font-extrabold uppercase px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                        🔥 RELEASE
+                    </span>
+                    <span class="font-mono text-[10px] md:text-xs text-zinc-300 ml-3 tracking-wide">
+                        Remastered Web UI by tanbaycu
+                    </span>
+                    <span class="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center ml-4 shadow-sm hover:scale-105 transition-transform flex-shrink-0">
+                        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                    </span>
+                </div>
+
+                <!-- Epic Headline -->
+                <h1 class="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.05] font-black tracking-tighter text-brand-dark mb-6 md:mb-8 uppercase">
+                    TỰ ĐỘNG TREO<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-green via-brand-info to-brand-green bg-[length:200%_auto] animate-gradient-x glowing-text drop-shadow-sm">DISCORD QUEST</span><br>
+                    AN TOÀN TUYỆT ĐỐI.
                 </h1>
                 
-                <p class="text-gray-500 font-sans text-base md:text-xl max-w-2xl mb-8 md:mb-10 leading-relaxed pr-4">
-                    Tự động hóa hoàn toàn quá trình stream nhận thưởng Discord Quest. <strong class="text-brand-dark">Không treo máy. Không tải game. An toàn tuyệt đối.</strong>
+                <!-- Subtext (Max 20 words) -->
+                <p class="text-gray-500 font-sans text-sm sm:text-base md:text-lg max-w-xl mb-10 leading-relaxed">
+                    Giả lập luồng stream thông minh. Treo máy nhận thưởng tự động mà không cần tải game hay cài đặt phần mềm.
                 </p>
 
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                    <a id="nav-to-app" class="cursor-pointer group flex items-center justify-center bg-brand-dark text-white px-8 py-4 rounded-2xl hover:bg-black transition-all shadow-lg hover:-translate-y-1">
+                <!-- Center Buttons -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 w-full sm:w-auto px-4 sm:px-0">
+                    <button class="open-app-trigger btn-3d-dark px-10 py-4 flex items-center justify-center gap-2.5">
                         <span class="font-sans text-sm md:text-base font-bold tracking-wide uppercase">Mở Hệ Thống</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-3 group-hover:translate-x-1 transition-transform"></i>
-                    </a>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
                     
-                    <a href="#guide-section" class="cursor-pointer flex items-center justify-center bg-gray-100 text-brand-dark px-8 py-4 rounded-2xl hover:bg-gray-200 transition-all font-sans text-sm md:text-base font-bold tracking-wide uppercase gap-2">
-                        Xem Hướng Dẫn <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    <a href="#guide-section" class="btn-3d-light px-10 py-4 flex items-center justify-center gap-2.5">
+                        <span class="font-sans text-sm md:text-base font-bold tracking-wide uppercase">Xem Hướng Dẫn</span>
+                        <i data-lucide="arrow-down" class="w-5 h-5"></i>
                     </a>
                 </div>
             </div>
@@ -334,8 +545,8 @@
                                     </div>
                                     <p class="text-gray-500 font-sans text-xs md:text-sm leading-relaxed">Kéo nút bên dưới thả lên<br>thanh Dấu trang (Bookmarks)</p>
                                 </div>
-                                <a href="javascript:(function(){var c=function(t){console.log('%cTOKEN CỦA BẠN: '+t,'color:green;font-size:20px;font-weight:bold;');try{var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);var d=document.createElement('div');d.innerHTML='<div style=&quot;position:fixed;top:20px;right:20px;background:#09090b;color:#fff;padding:16px 20px;border-radius:12px;font-family:system-ui;box-shadow:0 10px 25px rgba(0,0,0,0.5);z-index:999999;display:flex;align-items:center;gap:12px;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.2,0.8,0.2,1.2);border:1px solid #27272a&quot;><svg width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;#10b981&quot; stroke-width=&quot;2&quot;><path d=&quot;M22 11.08V12a10 10 0 1 1-5.93-9.14&quot;/><polyline points=&quot;22 4 12 14.01 9 11.01&quot;/></svg><div><div style=&quot;font-weight:600;font-size:15px;margin-bottom:4px&quot;>Đã Copy Token</div><div style=&quot;color:#a1a1aa;font-size:13px&quot;>Quay lại web Auto và dán (Ctrl+V) nhé!</div></div></div>';document.body.appendChild(d);var a=d.firstChild;setTimeout(function(){a.style.transform='translateX(0)'},10);setTimeout(function(){a.style.transform='translateX(120%)';setTimeout(function(){d.remove()},500)},4000)}catch(e){prompt('Token của bạn đây (Vui lòng bôi đen và nhấn Ctrl+C để copy):',t)}};try{var i=document.createElement('iframe');document.body.appendChild(i);var t=i.contentWindow.localStorage.token;i.remove();if(t)return c(t.replace(/&quot;/g,''))}catch(e){}window.webpackChunkdiscord_app.push([[Math.random()],{},(r)=>{for(var k in r.c){try{var e=r.c[k].exports,m=e&&e.default?e.default:e;if(m&&typeof m.getToken=='function'&&typeof m.setToken=='function'){var t=m.getToken();if(typeof t=='string'&&t.length>20)return c(t)}}catch(err){}}alert('❌ Không tìm thấy token. Đảm bảo bạn đang đăng nhập trên Discord Web.')}])})();" class="w-full py-3.5 bg-brand-dark hover:bg-black text-white font-bold rounded-xl font-sans text-sm uppercase tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-grab active:cursor-grabbing">
-                                    <i data-lucide="bookmark" class="w-4 h-4"></i>
+                                <a href="javascript:(function(){var c=function(t){console.log('%cTOKEN CỦA BẠN: '+t,'color:green;font-size:20px;font-weight:bold;');try{var x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');document.body.removeChild(x);var d=document.createElement('div');d.innerHTML='<div style=&quot;position:fixed;top:20px;right:20px;background:#09090b;color:#fff;padding:16px 20px;border-radius:12px;font-family:system-ui;box-shadow:0 10px 25px rgba(0,0,0,0.5);z-index:999999;display:flex;align-items:center;gap:12px;transform:translateX(120%);transition:transform 0.4s cubic-bezier(0.2,0.8,0.2,1.2);border:1px solid #27272a&quot;><svg width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;#10b981&quot; stroke-width=&quot;2&quot;><path d=&quot;M22 11.08V12a10 10 0 1 1-5.93-9.14&quot;/><polyline points=&quot;22 4 12 14.01 9 11.01&quot;/></svg><div><div style=&quot;font-weight:600;font-size:15px;margin-bottom:4px&quot;>Đã Copy Token</div><div style=&quot;color:#a1a1aa;font-size:13px&quot;>Quay lại web Auto và dán (Ctrl+V) nhé!</div></div></div>';document.body.appendChild(d);var a=d.firstChild;setTimeout(function(){a.style.transform='translateX(0)'},10);setTimeout(function(){a.style.transform='translateX(120%)';setTimeout(function(){d.remove()},500)},4000)}catch(e){prompt('Token của bạn đây (Vui lòng bôi đen và nhấn Ctrl+C để copy):',t)}};try{var i=document.createElement('iframe');document.body.appendChild(i);var t=i.contentWindow.localStorage.token;i.remove();if(t)return c(t.replace(/&quot;/g,''))}catch(e){}window.webpackChunkdiscord_app.push([[Math.random()],{},(r)=>{for(var k in r.c){try{var e=r.c[k].exports,m=e&&e.default?e.default:e;if(m&&typeof m.getToken=='function'&&typeof m.setToken=='function'){var t=m.getToken();if(typeof t=='string'&&t.length>20)return c(t)}}catch(err){}}alert('❌ Không tìm thấy token. Đảm bảo bạn đang đăng nhập trên Discord Web.')}])})();" class="btn-3d-dark w-full py-3.5 flex items-center justify-center gap-2 cursor-grab active:cursor-grabbing">
+                                    <i data-lucide="bookmark" class="w-5 h-5"></i>
                                     Lấy Token Discord
                                 </a>
                             </div>
@@ -385,7 +596,7 @@
                             <li><strong>Dán đoạn mã</strong> vừa copy ngay sau chữ đó và nhấn Đi/Enter. Token sẽ tự lưu vào máy!</li>
                         </ol>
 
-                        <button id="copy-mobile-btn" class="w-full py-4 bg-brand-dark hover:bg-gray-800 text-white font-bold rounded-xl font-mono text-sm md:text-base uppercase tracking-widest transition-all duration-300 transform hover:-translate-y-1 shadow-lg flex items-center justify-center gap-3 mt-auto">
+                        <button id="copy-mobile-btn" class="btn-3d-dark w-full py-4 mt-auto flex items-center justify-center gap-3">
                             <span id="copy-mobile-text">Copy Mã Điện Thoại</span>
                             <svg id="copy-mobile-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                         </button>
@@ -451,11 +662,11 @@
                                     <p class="font-mono text-[0.6rem] md:text-[0.65rem] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 md:mb-3">Original CLI Author</p>
                                     <h4 class="font-display text-xl md:text-3xl font-bold tracking-tight text-white mb-5">thanhdo1110</h4>
                                     
-                                    <a href="https://github.com/thanhdo1110/Discord-Quest-Auto-Completer" target="_blank" class="flex items-center justify-center sm:justify-start gap-3 bg-white/10 hover:bg-white/20 px-3 py-3 md:px-4 md:py-3.5 rounded-xl transition-all duration-300 w-full group/btn hover:-translate-y-1">
+                                    <a href="https://github.com/thanhdo1110/Discord-Quest-Auto-Completer" target="_blank" class="btn-3d-glass w-full py-3 px-4 flex items-center justify-center sm:justify-start gap-3">
                                         <i data-lucide="github" class="w-6 h-6 md:w-7 md:h-7 flex-shrink-0"></i>
                                         <div class="flex flex-col text-left">
-                                            <span class="font-mono text-[0.7rem] md:text-xs font-bold uppercase tracking-wider whitespace-nowrap">GitHub Repo</span>
-                                            <span class="font-mono text-[0.55rem] md:text-[0.6rem] text-brand-info font-bold uppercase mt-0.5 animate-pulse group-hover/btn:text-white transition-colors whitespace-nowrap">★ Cho 1 sao nhé!</span>
+                                            <span class="font-mono text-[0.7rem] md:text-xs font-bold uppercase tracking-wider text-white whitespace-nowrap">GitHub Repo</span>
+                                            <span class="font-mono text-[0.55rem] md:text-[0.6rem] text-brand-info font-bold uppercase mt-0.5 animate-pulse transition-colors whitespace-nowrap">★ Cho 1 sao nhé!</span>
                                         </div>
                                     </a>
                                 </div>
@@ -484,9 +695,9 @@
             <div class="lg:col-span-4 flex flex-col pt-2 md:pt-4 relative z-20">
                 
                 <!-- Back Button -->
-                <button id="nav-back" class="mb-10 font-mono text-[0.65rem] md:text-xs font-bold text-gray-400 hover:text-brand-dark uppercase tracking-widest flex items-center transition-colors w-max">
-                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
-                    Quay Về Trang Chủ
+                <button id="nav-back" class="btn-3d-light py-2.5 px-4 text-xs mb-10 w-max flex items-center gap-2">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Quay Về Trang Chủ</span>
                 </button>
 
                 <!-- Token Input Section -->
@@ -500,14 +711,14 @@
                     </div>
                     <div class="relative w-full">
                         <input type="password" id="token-input" placeholder="Paste Token..." class="token-input w-full font-mono text-2xl md:text-4xl font-bold tracking-tight bg-transparent pr-24">
-                        <div class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1 pr-2 text-gray-400">
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 text-gray-400">
                             <!-- Toggle Visibility Button -->
-                            <button id="toggle-token-btn" class="p-2 hover:text-brand-dark transition-colors bg-white/5 rounded-lg hover:bg-gray-100" title="Hiện/Ẩn Token">
+                            <button id="toggle-token-btn" class="btn-3d-icon p-2" title="Hiện/Ẩn Token">
                                 <i data-lucide="eye" id="eye-icon" class="w-5 h-5 md:w-6 md:h-6"></i>
                                 <i data-lucide="eye-off" id="eye-slash-icon" class="w-5 h-5 md:w-6 md:h-6 hidden"></i>
                             </button>
                             <!-- Clear Button -->
-                            <button id="clear-token-btn" class="p-2 hover:text-brand-dark transition-colors bg-white/5 rounded-lg hover:bg-gray-100" title="Xóa Token">
+                            <button id="clear-token-btn" class="btn-3d-icon p-2" title="Xóa Token">
                                 <i data-lucide="x" class="w-5 h-5 md:w-6 md:h-6"></i>
                             </button>
                         </div>
@@ -518,14 +729,14 @@
                 <div class="mb-12 md:mb-16 gsap-reveal stagger-2">
                     <div class="font-mono text-[0.65rem] md:text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-4 md:mb-6">Điều Khiển Tiến Trình</div>
                     <div id="action-wrapper" class="relative">
-                        <a id="action-start" class="action-link action-start group flex items-center gap-3 md:gap-4 hover:glowing-text">
-                            BẮT ĐẦU 
-                            <i data-lucide="arrow-right" class="w-8 h-8 md:w-12 md:h-12 transform transition-transform group-hover:translate-x-4 drop-shadow-md group-hover:drop-shadow-[0_0_15px_currentColor]"></i>
-                        </a>
-                        <a id="action-stop" class="action-link action-stop group hidden items-center gap-3 md:gap-4">
-                            DỪNG LẠI 
-                            <i data-lucide="x-circle" class="w-8 h-8 md:w-12 md:h-12 transform transition-transform group-hover:scale-110 text-brand-red"></i>
-                        </a>
+                        <button id="action-start" class="btn-3d-green w-full py-5 px-8 text-2xl md:text-3xl flex items-center justify-center gap-4">
+                            <span>BẮT ĐẦU</span>
+                            <i data-lucide="play" class="w-6 h-6 md:w-8 md:h-8"></i>
+                        </button>
+                        <button id="action-stop" class="btn-3d-red w-full py-5 px-8 text-2xl md:text-3xl hidden items-center justify-center gap-4">
+                            <span>DỪNG LẠI</span>
+                            <i data-lucide="square" class="w-6 h-6 md:w-8 md:h-8"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -597,25 +808,16 @@
                 );
             });
 
-            // Ticker Logic
-            const tickerLayouts = [
-                `<span class="text-brand-green">⚡ DISCORD QUEST AUTO</span><span class="text-white/30">//</span><span class="text-white">☁️ CLOUD BASED STREAMING</span><span class="text-white/30">//</span><span class="text-white">🎮 ZERO GAME INSTALL</span><span class="text-white/30">//</span><span class="text-white">🛡️ 100% ACCOUNT SAFE</span><span class="text-white/30">//</span><span class="text-brand-green">⚡ DISCORD QUEST AUTO</span><span class="text-white/30">//</span><span class="text-white">🚫 NO BAN RISK</span>`,
-                
-                `<span class="text-brand-info">🚀 REMASTERED WEB UI</span><span class="text-white/30">//</span><span class="text-white">💻 FULLY RESPONSIVE</span><span class="text-white/30">//</span><span class="text-white">🔒 SECURE API CALLS</span><span class="text-white/30">//</span><span class="text-white">⚡ INSTANT EXECUTION</span><span class="text-white/30">//</span><span class="text-brand-info">🚀 REMASTERED WEB UI</span><span class="text-white/30">//</span><span class="text-white">🔥 NO INSTALL REQUIRED</span>`
-            ];
-            
-            let tickerIdx = 0;
-            const tickerEl = document.getElementById('ticker-text');
-            if (tickerEl) {
-                tickerEl.innerHTML = tickerLayouts[0];
-                setInterval(() => {
-                    tickerEl.style.opacity = '0';
-                    setTimeout(() => {
-                        tickerIdx = (tickerIdx + 1) % tickerLayouts.length;
-                        tickerEl.innerHTML = tickerLayouts[tickerIdx];
-                        tickerEl.style.opacity = '1';
-                    }, 500);
-                }, 4000);
+            // Floating Header Scroll Logic
+            const header = document.querySelector('.floating-header');
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 40) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                });
             }
 
             const viewIntro = document.getElementById('view-intro');
@@ -634,14 +836,14 @@
                         
                         textEl.textContent = 'Đã Copy Mã!';
                         iconEl.innerHTML = '<i data-lucide="check" class="w-5 h-5"></i>'; lucide.createIcons();
-                        copyMobileBtn.classList.remove('bg-brand-dark', 'hover:bg-gray-800');
-                        copyMobileBtn.classList.add('bg-brand-green');
+                        copyMobileBtn.classList.remove('btn-3d-dark');
+                        copyMobileBtn.classList.add('btn-3d-green');
 
                         setTimeout(() => {
                             textEl.textContent = 'Copy Mã Điện Thoại';
                             iconEl.innerHTML = '<i data-lucide="copy" class="w-5 h-5"></i>'; lucide.createIcons();
-                            copyMobileBtn.classList.add('bg-brand-dark', 'hover:bg-gray-800');
-                            copyMobileBtn.classList.remove('bg-brand-green');
+                            copyMobileBtn.classList.add('btn-3d-dark');
+                            copyMobileBtn.classList.remove('btn-3d-green');
                         }, 3000);
                     } catch (err) {
                         alert('Không thể copy tự động. Vui lòng thử lại!');
@@ -698,16 +900,18 @@
                 currentToken = savedToken;
             }
 
-            // Navigate to App View
-            navToApp.addEventListener('click', () => {
-                viewIntro.classList.add('hidden');
-                viewApp.classList.remove('hidden');
-                viewApp.classList.add('flex');
-                window.scrollTo(0, 0);
-                
-                if (!currentToken) {
-                    tokenInput.focus();
-                }
+            // Navigate to App View (Gán cho toàn bộ các nút kích hoạt mở app)
+            document.querySelectorAll('.open-app-trigger').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    viewIntro.classList.add('hidden');
+                    viewApp.classList.remove('hidden');
+                    viewApp.classList.add('flex');
+                    window.scrollTo(0, 0);
+                    
+                    if (!currentToken) {
+                        tokenInput.focus();
+                    }
+                });
             });
 
             // Navigate Back
