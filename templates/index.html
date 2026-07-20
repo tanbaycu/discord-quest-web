@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Quest Auto - Tự động nhận thưởng an toàn</title>
-    <meta name="description" content="Discord Quest Auto - Công cụ tự động hóa quá trình stream nhận thưởng Discord Quest. Không treo máy, không tải game, an toàn tuyệt đối.">
-    <meta name="keywords" content="Discord Quest, Auto Discord Quest, Tự động Discord, Nhận thưởng Discord">
+    <title>Discord Quest Auto Completer | Remastered Web UI by tanbaycu</title>
+    <meta name="description" content="Discord Quest Auto Completer - Giải pháp tự động hóa stream treo nhận thưởng Discord Quest an toàn 100% được tối ưu và thiết kế bởi tanbaycu. Không cần cài game, hoạt động mượt mà trực tiếp trên trình duyệt.">
+    <meta name="keywords" content="discord quest, discord quest auto, discord quest completer, tanbaycu, discord auto stream, treo quest discord, tự động discord quest, discord quest auto tanbaycu, discord quest completion bot, discord bot, tool auto discord quest, stream discord quest auto">
     <meta name="author" content="tanbaycu">
-    <meta property="og:title" content="Discord Quest Auto - Tự động nhận thưởng">
-    <meta property="og:description" content="Tự động hóa stream nhận thưởng Discord Quest nhanh chóng. Không cần tải game, an toàn 100% qua token.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Discord Quest Auto Completer | Web UI by tanbaycu">
+    <meta property="og:description" content="Tự động hóa hoàn toàn quá trình stream hoàn thành các nhiệm vụ Discord Quest cực kỳ nhanh chóng và an toàn. Remastered Web UI thiết kế bởi tanbaycu.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="/static/logo.png">
+    <meta property="og:image" content="/static/logo-dark.svg">
+    <meta property="og:site_name" content="Discord Quest Auto Completer by tanbaycu">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Discord Quest Auto Completer | Web UI by tanbaycu">
+    <meta name="twitter:description" content="Tự động treo hoàn thành nhiệm vụ Discord Quest an toàn, tối ưu bởi tanbaycu.">
+    <meta name="twitter:image" content="/static/logo-dark.svg">
     <link rel="icon" type="image/svg+xml" href="/static/logo-light.svg" media="(prefers-color-scheme: light)">
     <link rel="icon" type="image/svg+xml" href="/static/logo-dark.svg" media="(prefers-color-scheme: dark)">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,25 +125,25 @@
             justify-content: center;
             background: linear-gradient(180deg, #27272a 0%, #09090b 100%);
             border: 1px solid #3f3f46;
-            border-bottom: 5px solid #000000;
+            border-bottom: 3px solid #000000;
             border-radius: 1rem;
             color: #ffffff;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform: translateY(0);
             cursor: pointer;
         }
         .btn-3d-dark:hover {
             background: linear-gradient(180deg, #3f3f46 0%, #18181b 100%);
-            transform: translateY(-2px);
-            border-bottom-width: 7px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+            border-bottom-width: 4px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
         .btn-3d-dark:active {
-            transform: translateY(4px);
+            transform: translateY(2px);
             border-bottom-width: 1px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.4);
         }
@@ -149,25 +155,25 @@
             justify-content: center;
             background: linear-gradient(180deg, #ffffff 0%, #f4f4f5 100%);
             border: 1px solid #e4e4e7;
-            border-bottom: 5px solid #d4d4d8;
+            border-bottom: 3px solid #d4d4d8;
             border-radius: 1rem;
             color: #09090b;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
             transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform: translateY(0);
             cursor: pointer;
         }
         .btn-3d-light:hover {
             background: linear-gradient(180deg, #f4f4f5 0%, #e4e4e7 100%);
-            transform: translateY(-2px);
-            border-bottom-width: 7px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+            border-bottom-width: 4px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
         }
         .btn-3d-light:active {
-            transform: translateY(4px);
+            transform: translateY(2px);
             border-bottom-width: 1px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -179,25 +185,25 @@
             justify-content: center;
             background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
             border: 1px solid #86efac;
-            border-bottom: 5px solid #14532d;
+            border-bottom: 3px solid #14532d;
             border-radius: 1rem;
             color: #ffffff;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            box-shadow: 0 6px 12px rgba(22, 163, 74, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 8px rgba(22, 163, 74, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
             transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform: translateY(0);
             cursor: pointer;
         }
         .btn-3d-green:hover {
             background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
-            transform: translateY(-2px);
-            border-bottom-width: 7px;
-            box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transform: translateY(-1px);
+            border-bottom-width: 4px;
+            box-shadow: 0 6px 12px rgba(22, 163, 74, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
         }
         .btn-3d-green:active {
-            transform: translateY(4px);
+            transform: translateY(2px);
             border-bottom-width: 1px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
@@ -209,27 +215,27 @@
             justify-content: center;
             background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
             border: 1px solid #fca5a5;
-            border-bottom: 5px solid #7f1d1d;
+            border-bottom: 3px solid #7f1d1d;
             border-radius: 1rem;
             color: #ffffff;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            box-shadow: 0 6px 12px rgba(220, 38, 38, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.4);
             transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform: translateY(0);
             cursor: pointer;
         }
         .btn-3d-red:hover {
             background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
-            transform: translateY(-2px);
-            border-bottom-width: 7px;
-            box-shadow: 0 8px 16px rgba(220, 38, 38, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transform: translateY(-1px);
+            border-bottom-width: 4px;
+            box-shadow: 0 6px 12px rgba(220, 38, 38, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
         }
         .btn-3d-red:active {
-            transform: translateY(4px);
+            transform: translateY(2px);
             border-bottom-width: 1px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 1px 2px rgba(220, 38, 38, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .btn-3d-glass {
@@ -239,25 +245,25 @@
             justify-content: center;
             background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
             border: 1px solid rgba(255,255,255,0.2);
-            border-bottom: 5px solid rgba(0,0,0,0.5);
+            border-bottom: 3px solid rgba(0,0,0,0.5);
             border-radius: 1rem;
             color: #ffffff;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
             transition: all 0.1s ease;
             transform: translateY(0);
             cursor: pointer;
         }
         .btn-3d-glass:hover {
             background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
-            transform: translateY(-2px);
-            border-bottom-width: 7px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+            border-bottom-width: 4px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2);
         }
         .btn-3d-glass:active {
-            transform: translateY(4px);
+            transform: translateY(2px);
             border-bottom-width: 1px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0 2px 4px rgba(0,0,0,0.2);
         }
@@ -294,7 +300,12 @@
         }
         .floating-header.scrolled {
             top: 0.75rem !important;
-            width: 95% !important;
+            width: 96% !important;
+        }
+        @media (min-width: 768px) {
+            .floating-header.scrolled {
+                width: 95% !important;
+            }
         }
         .floating-header.scrolled .glass-panel {
             padding-top: 0.75rem !important;
@@ -302,6 +313,21 @@
             background: rgba(255, 255, 255, 0.95);
             border-color: rgba(0, 200, 83, 0.2);
             box-shadow: 0 10px 30px -10px rgba(0, 200, 83, 0.15);
+        }
+
+        /* Responsive 3D Buttons override for desktop */
+        @media (min-width: 768px) {
+            .btn-3d-dark, .btn-3d-light, .btn-3d-green, .btn-3d-red, .btn-3d-glass {
+                border-bottom-width: 5px !important;
+            }
+            .btn-3d-dark:hover, .btn-3d-light:hover, .btn-3d-green:hover, .btn-3d-red:hover, .btn-3d-glass:hover {
+                transform: translateY(-2px) !important;
+                border-bottom-width: 7px !important;
+            }
+            .btn-3d-dark:active, .btn-3d-light:active, .btn-3d-green:active, .btn-3d-red:active, .btn-3d-glass:active {
+                transform: translateY(4px) !important;
+                border-bottom-width: 1px !important;
+            }
         }
 
         .token-input {
@@ -412,18 +438,18 @@
     <div id="view-intro" class="flex flex-col w-full min-h-screen">
         
         <!-- Floating Header -->
-        <header class="floating-header fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-6xl z-50 transition-all duration-300">
-            <div class="glass-panel px-6 py-4 flex items-center justify-between border border-white/40 shadow-lg rounded-2xl bg-white/80 backdrop-blur-md">
+        <header class="floating-header fixed top-4 left-1/2 -translate-x-1/2 w-[94%] md:w-[90%] max-w-6xl z-50 transition-all duration-300">
+            <div class="glass-panel px-4 py-3 md:px-6 md:py-4 flex items-center justify-between border border-white/40 shadow-lg rounded-2xl bg-white/80 backdrop-blur-md">
                 <!-- Logo / Branding -->
-                <a href="#" class="flex items-center gap-2.5 group">
-                    <svg class="w-7 h-7 text-brand-dark transition-transform group-hover:rotate-12 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+                <a href="#" class="flex items-center gap-1.5 md:gap-2.5 group">
+                    <svg class="w-6 h-6 md:w-7 md:h-7 text-brand-dark transition-transform group-hover:rotate-12 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
                         <line x1="28" y1="20" x2="28" y2="80" stroke="currentColor" stroke-width="6" stroke-linecap="round" />
                         <path d="M 28 20 C 56 20, 56 80, 28 80" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none" />
                         <circle cx="60" cy="50" r="18" stroke="currentColor" stroke-width="6" fill="none" />
                         <line x1="60" y1="50" x2="80" y2="30" stroke="currentColor" stroke-width="6" stroke-linecap="round" />
                         <path d="M 68 30 H 80 V 42" stroke="#00C853" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
                     </svg>
-                    <span class="font-display font-black text-lg md:text-xl tracking-tighter text-brand-dark">
+                    <span class="font-display font-black text-[13px] sm:text-lg md:text-xl tracking-tighter text-brand-dark">
                         DISCORD<span class="text-brand-green animate-pulse">QUEST</span>AUTO
                     </span>
                 </a>
@@ -441,8 +467,9 @@
                 
                 <!-- Action Buttons -->
                 <div class="flex items-center gap-3">
-                    <button class="open-app-trigger btn-3d-dark py-2 px-4 text-xs font-bold uppercase tracking-wider">
-                        Mở App
+                    <button class="open-app-trigger btn-3d-dark py-1.5 px-3 md:py-2 md:px-4 text-[10px] md:text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="md:hidden">MỞ APP ⚡</span>
+                        <span class="hidden md:inline">TRUY CẬP HỆ THỐNG 🚀</span>
                     </button>
                 </div>
             </div>
@@ -453,15 +480,15 @@
             <div class="max-w-5xl flex flex-col items-center text-center gsap-reveal stagger-1 z-10">
                 
                 <!-- 3D Pill Badge (As requested: badge + text + arrow) -->
-                <div class="open-app-trigger inline-flex items-center bg-[#09090B] border border-zinc-800 text-white rounded-full p-1.5 pr-4 shadow-[0_4px_0_#000000] hover:translate-y-0.5 hover:shadow-[0_2px_0_#000000] active:translate-y-1 active:shadow-none transition-all duration-100 cursor-pointer mb-8 md:mb-10 transform-gpu">
-                    <span class="bg-white text-black text-[9px] md:text-[10px] font-extrabold uppercase px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                <div class="open-app-trigger inline-flex items-center bg-[#09090B] border border-zinc-800 text-white rounded-full p-1 pr-3 md:p-1.5 md:pr-4 shadow-[0_3px_0_#000000] md:shadow-[0_4px_0_#000000] hover:translate-y-0.5 hover:shadow-[0_1.5px_0_#000000] md:hover:shadow-[0_2px_0_#000000] active:translate-y-1 active:shadow-none transition-all duration-100 cursor-pointer mb-8 md:mb-10 transform-gpu">
+                    <span class="bg-white text-black text-[8px] md:text-[10px] font-extrabold uppercase px-2 py-0.5 md:px-3 md:py-1 rounded-full flex items-center gap-1 shadow-sm flex-shrink-0">
                         🔥 RELEASE
                     </span>
-                    <span class="font-mono text-[10px] md:text-xs text-zinc-300 ml-3 tracking-wide">
+                    <span class="font-mono text-[9px] md:text-xs text-zinc-300 ml-2 md:ml-3 tracking-wide whitespace-nowrap">
                         Remastered Web UI by tanbaycu
                     </span>
-                    <span class="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center ml-4 shadow-sm hover:scale-105 transition-transform flex-shrink-0">
-                        <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                    <span class="w-5 h-5 md:w-6 md:h-6 rounded-full bg-white text-black flex items-center justify-center ml-2 md:ml-4 shadow-sm hover:scale-105 transition-transform flex-shrink-0">
+                        <i data-lucide="arrow-up-right" class="w-3 h-3 md:w-3.5 md:h-3.5"></i>
                     </span>
                 </div>
 
@@ -610,6 +637,42 @@
                     </div>
 
                 </div>
+
+                <!-- Telegram Chatbot Integration Card -->
+                <div class="mt-12 md:mt-16 gsap-reveal stagger-2">
+                    <div class="glass-panel p-6 md:p-10 rounded-[2rem] border border-brand-green/20 shadow-lg relative overflow-hidden flex flex-col lg:flex-row items-center gap-6 md:gap-8 bg-white/80 backdrop-blur-md">
+                        <!-- Light glow background -->
+                        <div class="absolute -right-24 -bottom-24 w-80 h-80 bg-brand-info/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+                        
+                        <!-- Left side: Visual Icon -->
+                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-brand-info/10 flex items-center justify-center flex-shrink-0 border border-brand-info/20 shadow-sm text-brand-info animate-pulse">
+                            <i data-lucide="bot" class="w-8 h-8 md:w-10 md:h-10"></i>
+                        </div>
+                        
+                        <!-- Middle: Details -->
+                        <div class="flex-1 text-center lg:text-left">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-info/10 text-brand-info rounded-full font-bold uppercase tracking-wider text-[10px] md:text-xs">
+                                <span class="w-1.5 h-1.5 rounded-full bg-brand-info animate-ping"></span> Telegram Chatbot Vệ Tinh
+                            </span>
+                            <h3 class="text-brand-dark font-display text-xl md:text-3xl font-black uppercase tracking-tight mt-3 mb-2">
+                                Auto Quest Completer Chatbot
+                            </h3>
+                            <p class="text-gray-500 font-sans text-sm md:text-base leading-relaxed">
+                                Không muốn mở website hay giữ tab trình duyệt? Chỉ cần chat với bot Telegram <strong class="text-brand-dark font-bold">@ngocmaicute_bot</strong>. 
+                                Gửi Token và bot sẽ tự động treo hoàn thành toàn bộ Discord Quest 24/7 trực tiếp trên mây cực kỳ nhanh gọn và bảo mật!
+                            </p>
+                        </div>
+                        
+                        <!-- Right side: CTA Button -->
+                        <div class="w-full lg:w-auto flex-shrink-0">
+                            <a href="https://t.me/ngocmaicute_bot" target="_blank" class="btn-3d-dark py-4 px-8 w-full lg:w-auto flex items-center justify-center gap-2">
+                                <span class="font-sans text-sm font-bold uppercase tracking-wider">Trải Nghiệm Chatbot</span>
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -747,11 +810,31 @@
                     </div>
                 </div>
 
+                <!-- Visual Quest Info Card -->
+                <div id="quest-info-card" class="hidden mb-6 p-4 md:p-5 rounded-2xl border border-white/60 bg-white/70 shadow-lg shadow-brand-dark/5 backdrop-blur-md transition-all duration-500 relative overflow-hidden transform-gpu">
+                    <div class="absolute -top-10 -right-10 w-24 h-24 bg-brand-green/5 rounded-full pointer-events-none"></div>
+                    <div class="flex items-center gap-4 relative z-10">
+                        <div id="quest-icon-wrapper" class="w-11 h-11 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center flex-shrink-0 text-brand-green">
+                            <i data-lucide="gamepad-2" class="w-5 h-5" id="quest-icon"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <span class="block font-mono text-[9px] font-bold text-gray-400 uppercase tracking-widest" id="quest-type-badge">GAME QUEST</span>
+                            <h4 class="font-display text-xs md:text-sm font-bold text-brand-dark truncate mt-0.5" id="quest-title">Tên nhiệm vụ...</h4>
+                            <span class="block font-mono text-[10px] text-gray-500 mt-1" id="quest-duration">Tiến độ: 0% (0s / 0s)</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Status Indicator -->
                 <div class="gsap-reveal stagger-3 mt-auto pb-8 lg:pb-0">
                     <div class="font-mono text-[0.65rem] md:text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-3 md:mb-4">Trạng Thái Hệ Thống</div>
                     <div id="status-indicator" class="font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter text-gray-300 transition-all duration-500">
                         ĐANG CHỜ LỆNH
+                    </div>
+                    
+                    <!-- Visual Progress Bar Wrapper -->
+                    <div id="progress-wrapper" class="hidden mt-4 w-full bg-gray-200/50 rounded-full h-3 border border-gray-300/40 p-0.5 overflow-hidden shadow-inner relative transition-all duration-500 transform-gpu">
+                        <div id="progress-bar" class="bg-gradient-to-r from-brand-green via-brand-info to-brand-green bg-[length:200%_auto] animate-gradient-x h-full rounded-full w-0 transition-all duration-500 shadow-[0_0_10px_rgba(0,200,83,0.4)]"></div>
                     </div>
                 </div>
 
@@ -981,6 +1064,11 @@
                     emptyLogMsg.parentNode.removeChild(emptyLogMsg);
                 }
 
+                // Giới hạn log tối đa 100 dòng mới nhất để tối ưu bộ nhớ DOM (chống lag GPU/CPU)
+                if (logContainer.childElementCount > 100) {
+                    logContainer.removeChild(logContainer.firstChild);
+                }
+
                 const row = document.createElement('div');
                 row.className = 'log-row fade-in';
                 row.style.animationDuration = '0.3s';
@@ -1090,6 +1178,13 @@
                 timerWorker.postMessage({ command: 'stop' });
                 releaseWakeLock();
                 appendLog("Đã yêu cầu dừng tiến trình.", "warn");
+                
+                // Ẩn Quest Card và Progress Bar khi dừng
+                const card = document.getElementById('quest-info-card');
+                const pWrapper = document.getElementById('progress-wrapper');
+                if (card) card.classList.add('hidden');
+                if (pWrapper) pWrapper.classList.add('hidden');
+
                 updateUIState(false, true);
                 setTimeout(() => updateUIState(false), 1000);
             });
@@ -1157,6 +1252,34 @@
                     if (data.status === 'active') {
                         activeQuest = data.quest;
                         appendLog(`Bắt đầu: ${activeQuest.name} (${activeQuest.task_type})`, "ok");
+                        
+                        // Cập nhật và hiển thị Quest Info Card
+                        const card = document.getElementById('quest-info-card');
+                        const qTitle = document.getElementById('quest-title');
+                        const qType = document.getElementById('quest-type-badge');
+                        const qDuration = document.getElementById('quest-duration');
+                        const qIcon = document.getElementById('quest-icon');
+                        
+                        if (card && qTitle && qType && qDuration && qIcon) {
+                            qTitle.textContent = activeQuest.name;
+                            const isVideo = activeQuest.task_type.includes("VIDEO");
+                            qType.textContent = isVideo ? "VIDEO QUEST" : "GAME QUEST";
+                            
+                            // Cập nhật icon Lucide
+                            qIcon.setAttribute('data-lucide', isVideo ? 'film' : 'gamepad-2');
+                            lucide.createIcons();
+                            
+                            card.classList.remove('hidden');
+                        }
+
+                        // Hiển thị Progress Bar
+                        const pWrapper = document.getElementById('progress-wrapper');
+                        const pBar = document.getElementById('progress-bar');
+                        if (pWrapper && pBar) {
+                            pWrapper.classList.remove('hidden');
+                            pBar.style.width = '0%';
+                        }
+
                         startQuestLoop();
                     }
                 } catch (error) {
@@ -1194,6 +1317,14 @@
                             });
                             const data = await res.json();
                             
+                            const pct = Math.min(100, Math.round((timestamp / needed) * 100));
+                            
+                            // Cập nhật Progress Bar & Duration
+                            const pBar = document.getElementById('progress-bar');
+                            const qDuration = document.getElementById('quest-duration');
+                            if (pBar) pBar.style.width = `${pct}%`;
+                            if (qDuration) qDuration.textContent = `Tiến độ: ${pct}% (${Math.round(timestamp)}s / ${needed}s)`;
+
                             if (data.completed || timestamp >= needed) {
                                 timerWorker.postMessage({ command: 'stop' });
                                 triggerConfetti();
@@ -1201,7 +1332,7 @@
                                 setTimeout(initQuestFlow, 2000); 
                                 return;
                             }
-                            const pct = Math.min(100, Math.round((timestamp / needed) * 100));
+                            
                             const bar = getProgressBar(timestamp, needed);
                             const funMsgs = ["Đồng bộ tín hiệu Video Stream...", "Bảo trì kết nối Server...", "Duy trì luồng dữ liệu giả lập...", "Đang phân tích gói tin..."];
                             const randomMsg = funMsgs[Math.floor(Math.random() * funMsgs.length)];
@@ -1224,6 +1355,14 @@
                                 done += 20; // Fallback local estimation if backend doesn't return progress
                             }
                             
+                            const pct = Math.min(100, Math.round((done / needed) * 100));
+                            
+                            // Cập nhật Progress Bar & Duration
+                            const pBar = document.getElementById('progress-bar');
+                            const qDuration = document.getElementById('quest-duration');
+                            if (pBar) pBar.style.width = `${pct}%`;
+                            if (qDuration) qDuration.textContent = `Tiến độ: ${pct}% (${done}s / ${needed}s)`;
+
                             if (data.completed || done >= needed) {
                                 timerWorker.postMessage({ command: 'stop' });
                                 triggerConfetti();
@@ -1232,7 +1371,6 @@
                                 return;
                             }
                             
-                            const pct = Math.min(100, Math.round((done / needed) * 100));
                             const bar = getProgressBar(done, needed);
                             const funMsgs = ["Gửi tín hiệu Heartbeat thành công...", "Đồng bộ tiến trình chơi Game...", "Duy trì kết nối Gateway...", "Trạng thái Client hợp lệ..."];
                             const randomMsg = funMsgs[Math.floor(Math.random() * funMsgs.length)];
