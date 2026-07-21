@@ -21,7 +21,29 @@
     <link rel="icon" type="image/svg+xml" href="/static/logo-dark.svg" media="(prefers-color-scheme: dark)">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Schema Markup JSON-LD for SEO by tanbaycu (II.1) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Discord Quest Auto Completer",
+      "url": "https://github.com/thanhdo1110/Discord-Quest-Auto-Completer",
+      "description": "Giải pháp tự động hóa stream treo nhận thưởng Discord Quest an toàn 100% được tối ưu và thiết kế bởi tanbaycu.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "tanbaycu",
+        "url": "https://tanbaycu.is-a.dev"
+      }
+    }
+    </script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -828,6 +850,28 @@
                     </div>
                 </div>
 
+                <!-- Visual Quest Board (I.1) -->
+                <div id="quest-board-card" class="hidden mb-6 p-4 md:p-5 rounded-2xl border border-white/60 bg-white/70 shadow-lg shadow-brand-dark/5 backdrop-blur-md transition-all duration-500 relative overflow-hidden transform-gpu">
+                    <div class="flex items-center justify-between mb-4 border-b border-gray-200/50 pb-3">
+                        <h4 class="font-display text-xs font-black uppercase tracking-wider text-brand-dark flex items-center gap-2">
+                            <i data-lucide="list-todo" class="w-4 h-4 text-brand-green"></i> Danh Sách Nhiệm Vụ
+                        </h4>
+                        <span id="quest-board-count" class="bg-gray-100 text-gray-500 font-mono text-[9px] font-bold px-2 py-0.5 rounded-full">0 Quest</span>
+                    </div>
+                    
+                    <!-- Loading Skeleton -->
+                    <div id="quest-board-skeleton" class="space-y-3">
+                        <div class="h-10 bg-gray-200/20 rounded-xl animate-pulse"></div>
+                        <div class="h-10 bg-gray-200/20 rounded-xl animate-pulse"></div>
+                        <div class="h-10 bg-gray-200/20 rounded-xl animate-pulse"></div>
+                    </div>
+                    
+                    <!-- Quests List Container -->
+                    <div id="quest-board-list" class="hidden space-y-2.5 max-h-[200px] overflow-y-auto pr-1">
+                        <!-- Quest items injected here -->
+                    </div>
+                </div>
+
                 <!-- Status Indicator -->
                 <div class="gsap-reveal stagger-3 mt-auto pb-8 lg:pb-0">
                     <div class="font-mono text-[0.65rem] md:text-xs font-bold tracking-[0.2em] text-gray-500 uppercase mb-3 md:mb-4">Trạng Thái Hệ Thống</div>
@@ -1172,6 +1216,15 @@
                 resetLogs();
                 isRunning = true;
                 updateUIState(true);
+
+                // Hiển thị Quest Board và bật Skeleton Loader (I.1)
+                const qBoardCard = document.getElementById('quest-board-card');
+                const qBoardSkeleton = document.getElementById('quest-board-skeleton');
+                const qBoardList = document.getElementById('quest-board-list');
+                if (qBoardCard) qBoardCard.classList.remove('hidden');
+                if (qBoardSkeleton) qBoardSkeleton.classList.remove('hidden');
+                if (qBoardList) qBoardList.classList.add('hidden');
+
                 await requestWakeLock();
                 await initQuestFlow();
             });
@@ -1182,11 +1235,13 @@
                 releaseWakeLock();
                 appendLog("Đã yêu cầu dừng tiến trình.", "warn");
                 
-                // Ẩn Quest Card và Progress Bar khi dừng
+                // Ẩn Quest Card, Progress Bar và Quest Board khi dừng (I.1)
                 const card = document.getElementById('quest-info-card');
                 const pWrapper = document.getElementById('progress-wrapper');
+                const qBoardCard = document.getElementById('quest-board-card');
                 if (card) card.classList.add('hidden');
                 if (pWrapper) pWrapper.classList.add('hidden');
+                if (qBoardCard) qBoardCard.classList.add('hidden');
 
                 updateUIState(false, true);
                 setTimeout(() => updateUIState(false), 1000);
@@ -1246,8 +1301,57 @@
                     appendLog("✅ Token hợp lệ. Đang tải danh sách nhiệm vụ...", "ok");
 
                     const data = await res.json();
+                    
+                    // Render Quest Board (I.1)
+                    const qBoardSkeleton = document.getElementById('quest-board-skeleton');
+                    const qBoardList = document.getElementById('quest-board-list');
+                    const qBoardCount = document.getElementById('quest-board-count');
+                    
+                    if (qBoardSkeleton && qBoardList && qBoardCount) {
+                        if (data.quests && data.quests.length > 0) {
+                            qBoardCount.textContent = `${data.quests.length} Quest`;
+                            qBoardList.innerHTML = '';
+                            data.quests.forEach(q => {
+                                const item = document.createElement('div');
+                                item.className = 'flex items-center justify-between p-2.5 rounded-xl border border-gray-200/40 bg-white/40 hover:bg-white/70 transition-all text-[11px]';
+                                
+                                let statusBadge = '';
+                                if (q.completed) {
+                                    statusBadge = '<span class="font-mono text-[9px] font-bold px-2 py-0.5 rounded-full bg-brand-green/10 text-brand-green">ĐÃ XONG</span>';
+                                } else if (data.quest && q.id === data.quest.id) {
+                                    statusBadge = '<span class="font-mono text-[9px] font-bold px-2 py-0.5 rounded-full bg-brand-info/10 text-brand-info animate-pulse">ĐANG TREO</span>';
+                                } else {
+                                    statusBadge = '<span class="font-mono text-[9px] font-bold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">KHẢ DỤNG</span>';
+                                }
+                                
+                                const isVideo = q.task_type.includes('VIDEO');
+                                const iconName = isVideo ? 'film' : 'gamepad-2';
+                                
+                                item.innerHTML = `
+                                    <div class="flex items-center gap-2.5 min-w-0">
+                                        <div class="w-6 h-6 rounded-lg bg-white border border-gray-200/50 flex items-center justify-center flex-shrink-0 text-gray-500">
+                                            <i data-lucide="${iconName}" class="w-3.5 h-3.5"></i>
+                                        </div>
+                                        <span class="font-sans font-semibold text-gray-700 truncate" title="${q.name}">${q.name}</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-shrink-0">
+                                        <span class="text-gray-400 font-mono text-[9px]">${Math.round(q.done)}s/${q.needed}s</span>
+                                        ${statusBadge}
+                                    </div>
+                                `;
+                                qBoardList.appendChild(item);
+                            });
+                            lucide.createIcons();
+                        } else {
+                            qBoardCount.textContent = '0 Quest';
+                            qBoardList.innerHTML = '<div class="text-center py-4 text-gray-400 text-xs font-sans">Không tìm thấy Quest nào.</div>';
+                        }
+                        qBoardSkeleton.classList.add('hidden');
+                        qBoardList.classList.remove('hidden');
+                    }
+
                     if (data.status === 'no_quests') {
-                        appendLog(data.message, "warn");
+                        appendLog("Không còn quest nào chưa hoàn thành cần làm.", "warn");
                         actionStop.click();
                         return;
                     }

@@ -19,6 +19,13 @@ def get_build_number():
 def index():
     return render_template("index.html")
 
+@app.after_request
+def add_header(response):
+    # Tối ưu bộ nhớ đệm (Browser Caching) cho các file tĩnh như logo SVG (III.2)
+    if request.path.startswith('/static/'):
+        response.headers['Cache-Control'] = 'public, max-age=31536000'
+    return response
+
 @app.route("/api/quest/init", methods=["POST"])
 def init_quest():
     data = request.json
@@ -33,31 +40,56 @@ def init_quest():
         return jsonify({"error": "Token không hợp lệ", "status": "error"}), 401
 
     completer = StatelessQuestCompleter(api)
-    active_quest = completer.get_actionable_quest()
+    quests = completer.fetch_quests()
     
-    if not active_quest:
-        return jsonify({"status": "no_quests", "message": "Không có quest nào cần làm lúc này."})
+    # Tự động enroll tất cả các quest chưa enroll
+    from core import is_enrolled, is_completed, is_completable, is_expired
+    enrolled_any = False
+    for q in quests:
+        if not is_enrolled(q) and not is_completed(q) and is_completable(q) and not is_expired(q):
+            completer.enroll_quest(q)
+            enrolled_any = True
+            
+    if enrolled_any:
+        quests = completer.fetch_quests()
         
-    task_type = get_task_type(active_quest)
-    name = get_quest_name(active_quest)
-    needed = get_seconds_needed(active_quest)
-    done = get_seconds_done(active_quest)
-    qid = active_quest["id"]
-    
-    # Pre-generate stream key for games
-    pid = random.randint(1000, 30000)
-    stream_key = f"call:0:{pid}" if "DESKTOP" in task_type else "call:0:1"
-    
+    quest_list = []
+    active_quest_data = None
+    for q in quests:
+        t_type = get_task_type(q)
+        if not t_type:
+            continue
+        q_name = get_quest_name(q)
+        q_needed = get_seconds_needed(q)
+        q_done = get_seconds_done(q)
+        q_completed = is_completed(q)
+        
+        # Chọn quest hoạt động chưa hoàn thành đầu tiên
+        if not active_quest_data and not q_completed and is_completable(q) and not is_expired(q):
+            pid = random.randint(1000, 30000)
+            stream_key = f"call:0:{pid}" if "DESKTOP" in t_type else "call:0:1"
+            active_quest_data = {
+                "id": q["id"],
+                "name": q_name,
+                "task_type": t_type,
+                "needed": q_needed,
+                "done": q_done,
+                "stream_key": stream_key
+            }
+            
+        quest_list.append({
+            "id": q["id"],
+            "name": q_name,
+            "task_type": t_type,
+            "needed": q_needed,
+            "done": q_done,
+            "completed": q_completed
+        })
+        
     return jsonify({
-        "status": "active",
-        "quest": {
-            "id": qid,
-            "name": name,
-            "task_type": task_type,
-            "needed": needed,
-            "done": done,
-            "stream_key": stream_key
-        }
+        "status": "active" if active_quest_data else "no_quests",
+        "quest": active_quest_data,
+        "quests": quest_list
     })
 
 @app.route("/api/quest/progress_video", methods=["POST"])
@@ -112,5 +144,5 @@ def progress_heartbeat():
     })
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, use_reloader=False, port=5000)
 
